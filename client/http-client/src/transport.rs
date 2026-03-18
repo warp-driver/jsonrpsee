@@ -30,6 +30,39 @@ use crate::{HttpBody, HttpRequest, HttpResponse};
 #[cfg(feature = "tls")]
 use crate::{CertificateStore, CustomCertStore};
 
+/// DNS resolver that calls `std::net` directly, bypassing tokio's `spawn_blocking`.
+/// Required for wasip2 where threads are not available.
+#[cfg(all(target_os = "wasi", target_env = "p2"))]
+mod direct_resolver {
+	use std::future::Ready;
+	use std::net::SocketAddr;
+	use std::task::{Context, Poll};
+
+	#[derive(Clone, Copy, Debug)]
+	pub struct DirectResolver;
+
+	impl tower::Service<hyper_util::client::legacy::connect::dns::Name> for DirectResolver {
+		type Response = std::vec::IntoIter<SocketAddr>;
+		type Error = std::io::Error;
+		type Future = Ready<Result<Self::Response, Self::Error>>;
+
+		fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+			Poll::Ready(Ok(()))
+		}
+
+		fn call(&mut self, name: hyper_util::client::legacy::connect::dns::Name) -> Self::Future {
+			let result = std::net::ToSocketAddrs::to_socket_addrs(&(name.as_str(), 0u16))
+				.map(|addrs| addrs.collect::<Vec<_>>().into_iter());
+			std::future::ready(result)
+		}
+	}
+}
+
+#[cfg(all(target_os = "wasi", target_env = "p2"))]
+type Connector = HttpConnector<direct_resolver::DirectResolver>;
+#[cfg(not(all(target_os = "wasi", target_env = "p2")))]
+type Connector = HttpConnector;
+
 const CONTENT_TYPE_JSON: &str = "application/json";
 
 /// Wrapper over HTTP transport and connector.
@@ -37,9 +70,9 @@ const CONTENT_TYPE_JSON: &str = "application/json";
 pub enum HttpBackend<B = HttpBody> {
 	/// Hyper client with https connector.
 	#[cfg(feature = "tls")]
-	Https(Client<hyper_rustls::HttpsConnector<HttpConnector>, B>),
+	Https(Client<hyper_rustls::HttpsConnector<Connector>, B>),
 	/// Hyper client with http connector.
-	Http(Client<HttpConnector, B>),
+	Http(Client<Connector, B>),
 }
 
 impl<B> Clone for HttpBackend<B> {
@@ -230,6 +263,9 @@ impl<L> HttpTransportClientBuilder<L> {
 
 		let client = match url.scheme() {
 			"http" => {
+				#[cfg(all(target_os = "wasi", target_env = "p2"))]
+				let mut connector = HttpConnector::new_with_resolver(direct_resolver::DirectResolver);
+				#[cfg(not(all(target_os = "wasi", target_env = "p2")))]
 				let mut connector = HttpConnector::new();
 				connector.set_nodelay(tcp_no_delay);
 				connector.set_keepalive(keep_alive_duration);
@@ -245,6 +281,9 @@ impl<L> HttpTransportClientBuilder<L> {
 				// Function returns an error if the provider is already installed, and we're fine with it.
 				let _ = rustls::crypto::ring::default_provider().install_default();
 
+				#[cfg(all(target_os = "wasi", target_env = "p2"))]
+				let mut http_conn = HttpConnector::new_with_resolver(direct_resolver::DirectResolver);
+				#[cfg(not(all(target_os = "wasi", target_env = "p2")))]
 				let mut http_conn = HttpConnector::new();
 				http_conn.set_nodelay(tcp_no_delay);
 				http_conn.enforce_http(false);
