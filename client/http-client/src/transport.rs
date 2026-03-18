@@ -10,6 +10,7 @@ use base64::Engine;
 use hyper::body::Bytes;
 use hyper::http::{HeaderMap, HeaderValue};
 use hyper_util::client::legacy::Client;
+#[cfg(not(all(target_os = "wasi", target_env = "p2")))]
 use hyper_util::client::legacy::connect::HttpConnector;
 use hyper_util::rt::TokioExecutor;
 use jsonrpsee_core::BoxError;
@@ -30,38 +31,47 @@ use crate::{HttpBody, HttpRequest, HttpResponse};
 #[cfg(feature = "tls")]
 use crate::{CertificateStore, CustomCertStore};
 
-/// DNS resolver that calls `std::net` directly, bypassing tokio's `spawn_blocking`.
-/// Required for wasip2 where threads are not available.
+/// TCP connector for wasip2 that bypasses hyper-util's `HttpConnector`.
+///
+/// `HttpConnector` creates sockets via socket2 and calls `set_nonblocking()`,
+/// which fails on wasip2. This connector uses `tokio::net::TcpStream::connect()`
+/// instead, which goes through mio's wasip2-compatible path.
+///
+/// DNS resolution uses `std::net::ToSocketAddrs` directly (not `spawn_blocking`)
+/// since wasip2 is single-threaded but wasi-libc provides working `getaddrinfo`.
 #[cfg(all(target_os = "wasi", target_env = "p2"))]
-mod direct_resolver {
-	use std::future::Ready;
-	use std::net::SocketAddr;
-	use std::task::{Context, Poll};
+#[derive(Clone, Debug)]
+struct WasiConnector;
 
-	#[derive(Clone, Copy, Debug)]
-	pub struct DirectResolver;
+#[cfg(all(target_os = "wasi", target_env = "p2"))]
+impl Service<hyper::Uri> for WasiConnector {
+	type Response = hyper_util::rt::TokioIo<tokio::net::TcpStream>;
+	type Error = Box<dyn std::error::Error + Send + Sync>;
+	type Future = Pin<Box<dyn Future<Output = Result<Self::Response, Self::Error>> + Send>>;
 
-	impl tower::Service<hyper_util::client::legacy::connect::dns::Name> for DirectResolver {
-		type Response = std::vec::IntoIter<SocketAddr>;
-		type Error = std::io::Error;
-		type Future = Ready<Result<Self::Response, Self::Error>>;
+	fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+		Poll::Ready(Ok(()))
+	}
 
-		fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-			Poll::Ready(Ok(()))
-		}
+	fn call(&mut self, uri: hyper::Uri) -> Self::Future {
+		Box::pin(async move {
+			let host = uri.host().ok_or("missing host")?;
+			let port = uri.port_u16().unwrap_or(match uri.scheme_str() {
+				Some("https") => 443,
+				_ => 80,
+			});
 
-		fn call(&mut self, name: hyper_util::client::legacy::connect::dns::Name) -> Self::Future {
-			let result = std::net::ToSocketAddrs::to_socket_addrs(&(name.as_str(), 0u16))
-				.map(|addrs| addrs.collect::<Vec<_>>().into_iter());
-			std::future::ready(result)
-		}
+			// Resolve DNS synchronously via std::net (wasi-libc getaddrinfo)
+			let addr = std::net::ToSocketAddrs::to_socket_addrs(&(host, port))?
+				.next()
+				.ok_or("DNS resolved no addresses")?;
+
+			// Connect via tokio (goes through mio's wasip2-compatible path)
+			let stream = tokio::net::TcpStream::connect(addr).await?;
+			Ok(hyper_util::rt::TokioIo::new(stream))
+		})
 	}
 }
-
-#[cfg(all(target_os = "wasi", target_env = "p2"))]
-type Connector = HttpConnector<direct_resolver::DirectResolver>;
-#[cfg(not(all(target_os = "wasi", target_env = "p2")))]
-type Connector = HttpConnector;
 
 const CONTENT_TYPE_JSON: &str = "application/json";
 
@@ -69,17 +79,21 @@ const CONTENT_TYPE_JSON: &str = "application/json";
 #[derive(Debug)]
 pub enum HttpBackend<B = HttpBody> {
 	/// Hyper client with https connector.
-	#[cfg(feature = "tls")]
-	Https(Client<hyper_rustls::HttpsConnector<Connector>, B>),
+	#[cfg(all(feature = "tls", not(all(target_os = "wasi", target_env = "p2"))))]
+	Https(Client<hyper_rustls::HttpsConnector<HttpConnector>, B>),
 	/// Hyper client with http connector.
-	Http(Client<Connector, B>),
+	#[cfg(not(all(target_os = "wasi", target_env = "p2")))]
+	Http(Client<HttpConnector, B>),
+	/// Hyper client with wasip2 connector.
+	#[cfg(all(target_os = "wasi", target_env = "p2"))]
+	Http(Client<WasiConnector, B>),
 }
 
 impl<B> Clone for HttpBackend<B> {
 	fn clone(&self) -> Self {
 		match self {
 			Self::Http(inner) => Self::Http(inner.clone()),
-			#[cfg(feature = "tls")]
+			#[cfg(all(feature = "tls", not(all(target_os = "wasi", target_env = "p2"))))]
 			Self::Https(inner) => Self::Https(inner.clone()),
 		}
 	}
@@ -98,7 +112,7 @@ where
 	fn poll_ready(&mut self, ctx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
 		match self {
 			Self::Http(inner) => inner.poll_ready(ctx),
-			#[cfg(feature = "tls")]
+			#[cfg(all(feature = "tls", not(all(target_os = "wasi", target_env = "p2"))))]
 			Self::Https(inner) => inner.poll_ready(ctx),
 		}
 		.map_err(|e| Error::Http(HttpError::Stream(e.into())))
@@ -107,7 +121,7 @@ where
 	fn call(&mut self, req: HttpRequest<B>) -> Self::Future {
 		let resp = match self {
 			Self::Http(inner) => inner.call(req),
-			#[cfg(feature = "tls")]
+			#[cfg(all(feature = "tls", not(all(target_os = "wasi", target_env = "p2"))))]
 			Self::Https(inner) => inner.call(req),
 		};
 
@@ -264,16 +278,20 @@ impl<L> HttpTransportClientBuilder<L> {
 		let client = match url.scheme() {
 			"http" => {
 				#[cfg(all(target_os = "wasi", target_env = "p2"))]
-				let mut connector = HttpConnector::new_with_resolver(direct_resolver::DirectResolver);
+				{
+					HttpBackend::Http(Client::builder(TokioExecutor::new()).build(WasiConnector))
+				}
 				#[cfg(not(all(target_os = "wasi", target_env = "p2")))]
-				let mut connector = HttpConnector::new();
-				connector.set_nodelay(tcp_no_delay);
-				connector.set_keepalive(keep_alive_duration);
-				connector.set_keepalive_interval(keep_alive_interval);
-				connector.set_keepalive_retries(keep_alive_retries);
-				HttpBackend::Http(Client::builder(TokioExecutor::new()).build(connector))
+				{
+					let mut connector = HttpConnector::new();
+					connector.set_nodelay(tcp_no_delay);
+					connector.set_keepalive(keep_alive_duration);
+					connector.set_keepalive_interval(keep_alive_interval);
+					connector.set_keepalive_retries(keep_alive_retries);
+					HttpBackend::Http(Client::builder(TokioExecutor::new()).build(connector))
+				}
 			}
-			#[cfg(feature = "tls")]
+			#[cfg(all(feature = "tls", not(all(target_os = "wasi", target_env = "p2"))))]
 			"https" => {
 				// Make sure that the TLS provider is set. If not, set a default one.
 				// Otherwise, creating `tls` configuration may panic if there are multiple
@@ -281,9 +299,6 @@ impl<L> HttpTransportClientBuilder<L> {
 				// Function returns an error if the provider is already installed, and we're fine with it.
 				let _ = rustls::crypto::ring::default_provider().install_default();
 
-				#[cfg(all(target_os = "wasi", target_env = "p2"))]
-				let mut http_conn = HttpConnector::new_with_resolver(direct_resolver::DirectResolver);
-				#[cfg(not(all(target_os = "wasi", target_env = "p2")))]
 				let mut http_conn = HttpConnector::new();
 				http_conn.set_nodelay(tcp_no_delay);
 				http_conn.enforce_http(false);
