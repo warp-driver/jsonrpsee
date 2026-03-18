@@ -62,10 +62,10 @@ pub use jsonrpsee_core::middleware::{RpcServiceBuilder, RpcServiceT};
 pub use transport::{HttpBackend, HttpTransportClient};
 
 /// Custom TLS configuration.
-#[cfg(feature = "tls")]
+#[cfg(any(feature = "tls", feature = "tls-rustcrypto"))]
 pub type CustomCertStore = rustls::ClientConfig;
 
-#[cfg(feature = "tls")]
+#[cfg(any(feature = "tls", feature = "tls-rustcrypto"))]
 // rustls needs the concrete `ClientConfig` type so we can't Box it here.
 #[allow(clippy::large_enum_variant)]
 #[derive(Clone, Debug)]
