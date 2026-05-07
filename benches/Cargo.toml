@@ -1,7 +1,7 @@
 [package]
 name = "wasi-jsonrpsee-benchmarks"
 description = "Benchmarks for wasi-jsonrpsee"
-version = "0.27.0"
+version = "0.26.1"
 authors = ["Parity Technologies <admin@parity.io>", "Pierre Krieger <pierre.krieger1708@gmail.com>"]
 edition = "2024"
 license = "MIT"

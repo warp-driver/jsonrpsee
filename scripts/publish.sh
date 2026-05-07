@@ -38,18 +38,18 @@ set +x
 for CRATE_DIR in ${ORDER[@]}; do
 	cd $CRATE_DIR > /dev/null
 	read_toml
-	remote_version
-	# Seems the latest version matches, skip by default.
-	if [ "$REMOTE_VERSION" = "$VERSION" ] || [[ "$REMOTE_VERSION" > "$VERSION" ]]; then
-		RET=""
-		echo "Seems like $NAME@$REMOTE_VERSION is already published. Continuing in 5s. "
-		read -t 5 -p ">>>> Type [r][enter] to retry, or [enter] to continue... " RET || true
-		if [ "$RET" != "r" ]; then
-			echo "Skipping $NAME@$VERSION"
-			cd - > /dev/null
-			continue
-		fi
-	fi
+	# remote_version
+	# # Seems the latest version matches, skip by default.
+	# if [ "$REMOTE_VERSION" = "$VERSION" ] || [[ "$REMOTE_VERSION" > "$VERSION" ]]; then
+	# 	RET=""
+	# 	echo "Seems like $NAME@$REMOTE_VERSION is already published. Continuing in 5s. "
+	# 	read -t 5 -p ">>>> Type [r][enter] to retry, or [enter] to continue... " RET || true
+	# 	if [ "$RET" != "r" ]; then
+	# 		echo "Skipping $NAME@$VERSION"
+	# 		cd - > /dev/null
+	# 		continue
+	# 	fi
+	# fi
 
 	# Attempt to publish (allow retries)
 	while : ; do
