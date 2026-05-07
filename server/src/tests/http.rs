@@ -33,12 +33,12 @@ use crate::{
 };
 use futures_util::future::{Future, FutureExt};
 use hyper::body::Bytes;
-use jsonrpsee_core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
-use jsonrpsee_core::{BoxError, RpcResult};
-use jsonrpsee_test_utils::TimeoutFutureExt;
-use jsonrpsee_test_utils::helpers::*;
-use jsonrpsee_test_utils::mocks::{Id, StatusCode};
-use jsonrpsee_types::ErrorObjectOwned;
+use wasi_jsonrpsee_core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
+use wasi_jsonrpsee_core::{BoxError, RpcResult};
+use wasi_jsonrpsee_test_utils::TimeoutFutureExt;
+use wasi_jsonrpsee_test_utils::helpers::*;
+use wasi_jsonrpsee_test_utils::mocks::{Id, StatusCode};
+use wasi_jsonrpsee_types::ErrorObjectOwned;
 use serde_json::Value as JsonValue;
 use std::pin::Pin;
 use std::task::{Context, Poll};

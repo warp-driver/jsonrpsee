@@ -11,10 +11,10 @@ use futures_util::io::{BufReader, BufWriter};
 use futures_util::{Future, StreamExt, TryStreamExt};
 use hyper::upgrade::Upgraded;
 use hyper_util::rt::TokioIo;
-use jsonrpsee_core::middleware::{RpcServiceBuilder, RpcServiceT};
-use jsonrpsee_core::server::{BoundedSubscriptions, MethodResponse, MethodSink, Methods};
-use jsonrpsee_types::Id;
-use jsonrpsee_types::error::{ErrorCode, reject_too_big_request};
+use wasi_jsonrpsee_core::middleware::{RpcServiceBuilder, RpcServiceT};
+use wasi_jsonrpsee_core::server::{BoundedSubscriptions, MethodResponse, MethodSink, Methods};
+use wasi_jsonrpsee_types::Id;
+use wasi_jsonrpsee_types::error::{ErrorCode, reject_too_big_request};
 use serde_json::value::RawValue;
 use soketto::connection::Error as SokettoError;
 use soketto::data::ByteSlice125;
@@ -386,8 +386,8 @@ async fn graceful_shutdown<S>(
 /// to complete the HTTP request.
 ///
 /// ```no_run
-/// use jsonrpsee_server::{ws, ServerConfig, Methods, ConnectionState, HttpRequest, HttpResponse};
-/// use jsonrpsee_server::middleware::rpc::{RpcServiceBuilder, RpcServiceT, RpcService, MethodResponse};
+/// use wasi_jsonrpsee_server::{ws, ServerConfig, Methods, ConnectionState, HttpRequest, HttpResponse};
+/// use wasi_jsonrpsee_server::middleware::rpc::{RpcServiceBuilder, RpcServiceT, RpcService, MethodResponse};
 /// use std::convert::Infallible;
 ///
 /// async fn handle_websocket_conn<L>(

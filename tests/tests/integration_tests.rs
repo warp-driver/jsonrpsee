@@ -43,17 +43,17 @@ use helpers::{
 use http_body_util::BodyExt;
 use hyper::http::HeaderValue;
 use hyper_util::rt::TokioExecutor;
-use jsonrpsee::core::client::SubscriptionCloseReason;
-use jsonrpsee::core::client::{ClientT, Error, IdKind, Subscription, SubscriptionClientT};
-use jsonrpsee::core::params::{ArrayParams, BatchRequestBuilder};
-use jsonrpsee::core::{JsonValue, SubscriptionError};
-use jsonrpsee::http_client::HttpClientBuilder;
-use jsonrpsee::server::middleware::http::HostFilterLayer;
-use jsonrpsee::server::{ConnectionGuard, ServerBuilder, ServerConfig, ServerHandle};
-use jsonrpsee::types::error::{ErrorObject, UNKNOWN_ERROR_CODE};
-use jsonrpsee::ws_client::WsClientBuilder;
-use jsonrpsee::{ResponsePayload, RpcModule, rpc_params};
-use jsonrpsee_test_utils::TimeoutFutureExt;
+use wasi_jsonrpsee::core::client::SubscriptionCloseReason;
+use wasi_jsonrpsee::core::client::{ClientT, Error, IdKind, Subscription, SubscriptionClientT};
+use wasi_jsonrpsee::core::params::{ArrayParams, BatchRequestBuilder};
+use wasi_jsonrpsee::core::{JsonValue, SubscriptionError};
+use wasi_jsonrpsee::http_client::HttpClientBuilder;
+use wasi_jsonrpsee::server::middleware::http::HostFilterLayer;
+use wasi_jsonrpsee::server::{ConnectionGuard, ServerBuilder, ServerConfig, ServerHandle};
+use wasi_jsonrpsee::types::error::{ErrorObject, UNKNOWN_ERROR_CODE};
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::{ResponsePayload, RpcModule, rpc_params};
+use wasi_jsonrpsee_test_utils::TimeoutFutureExt;
 use tokio::time::interval;
 use tokio_stream::wrappers::IntervalStream;
 use tower_http::cors::CorsLayer;
@@ -514,7 +514,7 @@ async fn ws_close_pending_subscription_when_server_terminated() {
 #[tokio::test]
 async fn ws_server_should_stop_subscription_after_client_drop() {
 	use futures::{SinkExt, StreamExt, channel::mpsc};
-	use jsonrpsee::{RpcModule, server::ServerBuilder};
+	use wasi_jsonrpsee::{RpcModule, server::ServerBuilder};
 
 	init_logger();
 
@@ -561,7 +561,7 @@ async fn ws_server_should_stop_subscription_after_client_drop() {
 
 #[tokio::test]
 async fn ws_server_stop_subscription_when_dropped() {
-	use jsonrpsee::{RpcModule, server::ServerBuilder};
+	use wasi_jsonrpsee::{RpcModule, server::ServerBuilder};
 
 	init_logger();
 
@@ -808,8 +808,8 @@ async fn http_batch_works() {
 #[tokio::test]
 async fn ws_server_limit_subs_per_conn_works() {
 	use futures::StreamExt;
-	use jsonrpsee::types::error::{TOO_MANY_SUBSCRIPTIONS_CODE, TOO_MANY_SUBSCRIPTIONS_MSG};
-	use jsonrpsee::{RpcModule, server::ServerBuilder};
+	use wasi_jsonrpsee::types::error::{TOO_MANY_SUBSCRIPTIONS_CODE, TOO_MANY_SUBSCRIPTIONS_MSG};
+	use wasi_jsonrpsee::{RpcModule, server::ServerBuilder};
 
 	init_logger();
 
@@ -864,8 +864,8 @@ async fn ws_server_limit_subs_per_conn_works() {
 #[tokio::test]
 async fn ws_server_unsub_methods_should_ignore_sub_limit() {
 	use futures::StreamExt;
-	use jsonrpsee::core::client::SubscriptionKind;
-	use jsonrpsee::{RpcModule, server::ServerBuilder};
+	use wasi_jsonrpsee::core::client::SubscriptionKind;
+	use wasi_jsonrpsee::{RpcModule, server::ServerBuilder};
 
 	init_logger();
 
@@ -1096,7 +1096,7 @@ async fn http_health_api_works() {
 
 #[tokio::test]
 async fn ws_host_filtering_wildcard_works() {
-	use jsonrpsee::server::*;
+	use wasi_jsonrpsee::server::*;
 
 	init_logger();
 
@@ -1118,7 +1118,7 @@ async fn ws_host_filtering_wildcard_works() {
 
 #[tokio::test]
 async fn http_host_filtering_wildcard_works() {
-	use jsonrpsee::server::*;
+	use wasi_jsonrpsee::server::*;
 
 	init_logger();
 
@@ -1140,7 +1140,7 @@ async fn http_host_filtering_wildcard_works() {
 
 #[tokio::test]
 async fn deny_invalid_host() {
-	use jsonrpsee::server::*;
+	use wasi_jsonrpsee::server::*;
 
 	init_logger();
 
@@ -1172,7 +1172,7 @@ async fn deny_invalid_host() {
 
 #[tokio::test]
 async fn disable_host_filter_works() {
-	use jsonrpsee::server::*;
+	use wasi_jsonrpsee::server::*;
 
 	init_logger();
 
@@ -1314,7 +1314,7 @@ async fn run_shutdown_test_inner<C: ClientT + Send + Sync + 'static>(
 
 #[tokio::test]
 async fn response_payload_async_api_works() {
-	use jsonrpsee::server::{Server, SubscriptionSink};
+	use wasi_jsonrpsee::server::{Server, SubscriptionSink};
 	use std::sync::Arc;
 	use tokio::sync::Mutex as AsyncMutex;
 
@@ -1379,7 +1379,7 @@ async fn response_payload_async_api_works() {
 		format!("ws://{addr}")
 	};
 
-	let client = jsonrpsee::ws_client::WsClientBuilder::default()
+	let client = wasi_jsonrpsee::ws_client::WsClientBuilder::default()
 		.build(&server_addr)
 		.with_default_timeout()
 		.await
@@ -1453,8 +1453,8 @@ async fn server_ws_low_api_works() {
 
 	async fn run_server() -> anyhow::Result<SocketAddr> {
 		use futures_util::future::FutureExt;
-		use jsonrpsee::core::{BoxError, middleware::RpcServiceBuilder};
-		use jsonrpsee::server::{
+		use wasi_jsonrpsee::core::{BoxError, middleware::RpcServiceBuilder};
+		use wasi_jsonrpsee::server::{
 			ConnectionGuard, ConnectionState, Methods, ServerConfig, StopHandle, http, serve_with_graceful_shutdown,
 			stop_channel, ws,
 		};
@@ -1535,7 +1535,7 @@ async fn server_ws_low_api_works() {
 
 #[tokio::test]
 async fn http_connection_guard_works() {
-	use jsonrpsee::{RpcModule, server::ServerBuilder};
+	use wasi_jsonrpsee::{RpcModule, server::ServerBuilder};
 	use tokio::sync::mpsc;
 
 	init_logger();

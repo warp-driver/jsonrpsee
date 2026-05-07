@@ -35,10 +35,10 @@ use crate::traits::ToJson;
 
 use futures_util::{Future, FutureExt};
 use http::Extensions;
-use jsonrpsee_types::error::{
+use wasi_jsonrpsee_types::error::{
 	ErrorCode, ErrorObject, OVERSIZED_RESPONSE_CODE, OVERSIZED_RESPONSE_MSG, reject_too_big_batch_response,
 };
-use jsonrpsee_types::{ErrorObjectOwned, Id, Response, ResponsePayload as InnerResponsePayload};
+use wasi_jsonrpsee_types::{ErrorObjectOwned, Id, Response, ResponsePayload as InnerResponsePayload};
 use serde::Serialize;
 use serde_json::value::{RawValue, to_raw_value};
 
@@ -219,7 +219,7 @@ impl MethodResponse {
 					}
 				} else {
 					let err = ErrorCode::InternalError;
-					let payload = jsonrpsee_types::ResponsePayload::<()>::error(err);
+					let payload = wasi_jsonrpsee_types::ResponsePayload::<()>::error(err);
 					let json = serde_json::value::to_raw_value(&Response::new(payload, id))
 						.expect("JSON serialization infallible; qed");
 					Self {
@@ -389,7 +389,7 @@ pub fn batch_response_error(id: Id, err: impl Into<ErrorObject<'static>>) -> Box
 	serde_json::value::to_raw_value(&Response::new(err, id)).expect("JSON serialization infallible; qed")
 }
 
-/// Similar to [`jsonrpsee_types::ResponsePayload`] but possible to with an async-like
+/// Similar to [`wasi_jsonrpsee_types::ResponsePayload`] but possible to with an async-like
 /// API to detect when a method response has been sent.
 #[derive(Debug)]
 pub struct ResponsePayload<'a, T>
@@ -604,7 +604,7 @@ mod tests {
 
 	#[test]
 	fn bounded_serializer_work() {
-		use jsonrpsee_types::{Response, ResponsePayload};
+		use wasi_jsonrpsee_types::{Response, ResponsePayload};
 
 		let mut writer = BoundedWriter::new(100);
 		let result = ResponsePayload::success(&"success");

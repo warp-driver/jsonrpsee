@@ -1,5 +1,5 @@
 [package]
-name = "jsonrpsee-types"
+name = "wasi-jsonrpsee-types"
 description = "JSON-RPC v2 specific types"
 version.workspace = true
 authors.workspace = true

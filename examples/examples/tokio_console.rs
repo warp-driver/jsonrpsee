@@ -36,8 +36,8 @@
 
 use std::net::SocketAddr;
 
-use jsonrpsee::RpcModule;
-use jsonrpsee::server::Server;
+use wasi_jsonrpsee::RpcModule;
+use wasi_jsonrpsee::server::Server;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

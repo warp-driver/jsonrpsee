@@ -56,9 +56,9 @@ use helpers::{
 	process_single_response, process_subscription_response, stop_subscription,
 };
 use http::Extensions;
-use jsonrpsee_types::response::SubscriptionError;
-use jsonrpsee_types::{InvalidRequestId, ResponseSuccess, TwoPointZero};
-use jsonrpsee_types::{Response, SubscriptionResponse};
+use wasi_jsonrpsee_types::response::SubscriptionError;
+use wasi_jsonrpsee_types::{InvalidRequestId, ResponseSuccess, TwoPointZero};
+use wasi_jsonrpsee_types::{Response, SubscriptionResponse};
 use manager::RequestManager;
 use serde::de::DeserializeOwned;
 use std::sync::Arc;
@@ -71,7 +71,7 @@ use super::{
 	generate_batch_id_range, subscription_channel,
 };
 
-pub(crate) type Notification<'a> = jsonrpsee_types::Notification<'a, Option<Box<JsonRawValue>>>;
+pub(crate) type Notification<'a> = wasi_jsonrpsee_types::Notification<'a, Option<Box<JsonRawValue>>>;
 
 type Logger = tower::layer::util::Stack<RpcLoggerLayer, tower::layer::util::Identity>;
 
@@ -233,7 +233,7 @@ impl<L> ClientBuilder<L> {
 	/// will be dropped (default is 1024).
 	///
 	/// You may prevent the subscription from being dropped by polling often enough
-	/// [`Subscription::next()`](../../jsonrpsee_core/client/struct.Subscription.html#method.next) such that
+	/// [`Subscription::next()`](../../wasi_jsonrpsee_core/client/struct.Subscription.html#method.next) such that
 	/// it can keep with the rate as server produces new items on the subscription.
 	///
 	///
@@ -510,7 +510,7 @@ where
 			// NOTE: we use this to guard against max number of concurrent requests.
 			let _req_id = self.id_manager.next_request_id();
 			let params = params.to_rpc_params()?.map(StdCow::Owned);
-			let fut = self.service.notification(jsonrpsee_types::Notification::new(method.into(), params));
+			let fut = self.service.notification(wasi_jsonrpsee_types::Notification::new(method.into(), params));
 			self.run_future_until_timeout(fut).await?;
 			Ok(())
 		}

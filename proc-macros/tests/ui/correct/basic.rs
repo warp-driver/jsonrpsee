@@ -2,13 +2,13 @@
 
 use std::net::SocketAddr;
 
-use jsonrpsee::core::client::ClientT;
-use jsonrpsee::core::params::ArrayParams;
-use jsonrpsee::core::{RpcResult, SubscriptionResult, async_trait, to_json_raw_value};
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::types::ErrorObject;
-use jsonrpsee::ws_client::*;
-use jsonrpsee::{Extensions, PendingSubscriptionSink, rpc_params};
+use wasi_jsonrpsee::core::client::ClientT;
+use wasi_jsonrpsee::core::params::ArrayParams;
+use wasi_jsonrpsee::core::{RpcResult, SubscriptionResult, async_trait, to_json_raw_value};
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::types::ErrorObject;
+use wasi_jsonrpsee::ws_client::*;
+use wasi_jsonrpsee::{Extensions, PendingSubscriptionSink, rpc_params};
 
 #[rpc(client, server, namespace = "foo")]
 pub trait Rpc {
@@ -81,11 +81,11 @@ impl RpcServer for RpcServerImpl {
 		Ok(half_type.then(|| r#type / 2).unwrap_or(r#type))
 	}
 
-	async fn conn_id(&self, ext: &jsonrpsee::Extensions) -> RpcResult<u32> {
+	async fn conn_id(&self, ext: &wasi_jsonrpsee::Extensions) -> RpcResult<u32> {
 		ext.get::<u32>().cloned().ok_or_else(|| ErrorObject::owned(0, "No connection details found", None::<()>))
 	}
 
-	fn sync_conn_id(&self, ext: &jsonrpsee::Extensions) -> RpcResult<u32> {
+	fn sync_conn_id(&self, ext: &wasi_jsonrpsee::Extensions) -> RpcResult<u32> {
 		ext.get::<u32>().cloned().ok_or_else(|| ErrorObject::owned(0, "No connection details found", None::<()>))
 	}
 
@@ -138,8 +138,8 @@ impl RpcServer for RpcServerImpl {
 
 pub async fn server() -> SocketAddr {
 	use hyper_util::rt::{TokioExecutor, TokioIo};
-	use jsonrpsee::core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
-	use jsonrpsee::server::stop_channel;
+	use wasi_jsonrpsee::core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
+	use wasi_jsonrpsee::server::stop_channel;
 	use std::convert::Infallible;
 	use std::sync::{Arc, atomic::AtomicU32};
 	use tower::Service;
@@ -160,7 +160,7 @@ pub async fn server() -> SocketAddr {
 
 		fn call<'a>(
 			&self,
-			mut request: jsonrpsee::types::Request<'a>,
+			mut request: wasi_jsonrpsee::types::Request<'a>,
 		) -> impl Future<Output = Self::MethodResponse> + Send + 'a {
 			request.extensions_mut().insert(self.connection_id);
 			self.inner.call(request)
@@ -185,7 +185,7 @@ pub async fn server() -> SocketAddr {
 
 	tokio::spawn(async move {
 		let conn_id = Arc::new(AtomicU32::new(0));
-		let svc_builder = jsonrpsee::server::Server::builder().to_service_builder();
+		let svc_builder = wasi_jsonrpsee::server::Server::builder().to_service_builder();
 		let methods = RpcServerImpl.into_rpc();
 
 		loop {

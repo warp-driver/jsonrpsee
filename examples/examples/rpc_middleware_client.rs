@@ -36,12 +36,12 @@
 use std::net::SocketAddr;
 use std::sync::{Arc, Mutex};
 
-use jsonrpsee::core::client::{ClientT, MiddlewareMethodResponse, error::Error};
-use jsonrpsee::core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
-use jsonrpsee::rpc_params;
-use jsonrpsee::server::{RpcModule, Server};
-use jsonrpsee::types::{ErrorCode, ErrorObject, Request};
-use jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::core::client::{ClientT, MiddlewareMethodResponse, error::Error};
+use wasi_jsonrpsee::core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
+use wasi_jsonrpsee::rpc_params;
+use wasi_jsonrpsee::server::{RpcModule, Server};
+use wasi_jsonrpsee::types::{ErrorCode, ErrorObject, Request};
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
 
 #[derive(Default)]
 struct InnerMetrics {

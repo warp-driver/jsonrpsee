@@ -44,7 +44,7 @@ pub use method_response::*;
 pub use rpc_module::*;
 pub use subscription::*;
 
-use jsonrpsee_types::ErrorObjectOwned;
+use wasi_jsonrpsee_types::ErrorObjectOwned;
 
 const LOG_TARGET: &str = "jsonrpsee-server";
 
@@ -107,7 +107,7 @@ where
 	}
 }
 
-impl<T> IntoResponse for jsonrpsee_types::ResponsePayload<'static, T>
+impl<T> IntoResponse for wasi_jsonrpsee_types::ResponsePayload<'static, T>
 where
 	T: serde::Serialize + Clone,
 {

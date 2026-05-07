@@ -4,7 +4,7 @@ use futures_channel::mpsc;
 use futures_util::sink::SinkExt;
 use futures_util::stream::{SplitSink, SplitStream, StreamExt};
 use gloo_net::websocket::{Message, WebSocketError, futures::WebSocket};
-use jsonrpsee_core::client::{ReceivedMessage, TransportReceiverT, TransportSenderT};
+use wasi_jsonrpsee_core::client::{ReceivedMessage, TransportReceiverT, TransportSenderT};
 
 /// Web-sys transport error that can occur.
 #[derive(Debug, thiserror::Error)]

@@ -30,12 +30,12 @@ use std::net::SocketAddr;
 
 use futures::StreamExt;
 use futures::future::{self, Either};
-use jsonrpsee::PendingSubscriptionSink;
-use jsonrpsee::core::client::{Subscription, SubscriptionClientT};
-use jsonrpsee::core::middleware::RpcServiceBuilder;
-use jsonrpsee::rpc_params;
-use jsonrpsee::server::{RpcModule, Server, ServerConfig};
-use jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::PendingSubscriptionSink;
+use wasi_jsonrpsee::core::client::{Subscription, SubscriptionClientT};
+use wasi_jsonrpsee::core::middleware::RpcServiceBuilder;
+use wasi_jsonrpsee::rpc_params;
+use wasi_jsonrpsee::server::{RpcModule, Server, ServerConfig};
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
 use tokio::sync::broadcast;
 use tokio_stream::wrappers::BroadcastStream;
 

@@ -1,5 +1,5 @@
 [package]
-name = "jsonrpsee-wasm-client"
+name = "wasi-jsonrpsee-wasm-client"
 description = "JSON-RPC WASM client"
 version.workspace = true
 authors.workspace = true
@@ -17,9 +17,9 @@ publish = true
 workspace = true
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-jsonrpsee-types = { workspace = true }
-jsonrpsee-client-transport = { workspace = true, features = ["web"] }
-jsonrpsee-core = { workspace = true, features = ["async-wasm-client"] }
+wasi-jsonrpsee-types = { workspace = true }
+wasi-jsonrpsee-client-transport = { workspace = true, features = ["web"] }
+wasi-jsonrpsee-core = { workspace = true, features = ["async-wasm-client"] }
 tower = { workspace = true }
 
 [package.metadata.docs.rs]

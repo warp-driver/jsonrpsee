@@ -32,7 +32,7 @@ use crate::{HttpBody, HttpRequest, LOG_TARGET};
 use futures_util::{Future, FutureExt, TryFutureExt};
 use hyper::Response;
 use hyper::body::Bytes;
-use jsonrpsee_core::BoxError;
+use wasi_jsonrpsee_core::BoxError;
 use route_recognizer::Router;
 use std::collections::BTreeMap;
 use std::pin::Pin;
@@ -67,7 +67,7 @@ impl HostFilterLayer {
 	/// For example the following won't compile:
 	///
 	/// ```ignore
-	/// use jsonrpsee_server::middleware::{ProxyGetRequestLayer, HostFilterLayer};
+	/// use wasi_jsonrpsee_server::middleware::{ProxyGetRequestLayer, HostFilterLayer};
 	///
 	/// let host_filter = false;
 	///

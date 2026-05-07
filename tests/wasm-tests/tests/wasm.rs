@@ -1,11 +1,11 @@
 #![cfg(target_arch = "wasm32")]
 
-use jsonrpsee_client_transport::web::*;
-use jsonrpsee_core::{
+use wasi_jsonrpsee_client_transport::web::*;
+use wasi_jsonrpsee_core::{
 	client::{ClientT, ReceivedMessage, Subscription, SubscriptionClientT, TransportReceiverT, TransportSenderT},
 	rpc_params,
 };
-use jsonrpsee_wasm_client::WasmClientBuilder;
+use wasi_jsonrpsee_wasm_client::WasmClientBuilder;
 use wasm_bindgen_test::*;
 
 wasm_bindgen_test::wasm_bindgen_test_configure!(run_in_browser);

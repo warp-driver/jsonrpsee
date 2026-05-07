@@ -31,14 +31,14 @@
 //! stored in something to provide interior mutability
 //! such as `Arc<Mutex>`
 
-use jsonrpsee::core::client::ClientT;
-use jsonrpsee::core::middleware::{
+use wasi_jsonrpsee::core::client::ClientT;
+use wasi_jsonrpsee::core::middleware::{
 	Batch, BatchEntry, BatchEntryErr, Notification, ResponseFuture, RpcServiceBuilder, RpcServiceT,
 };
-use jsonrpsee::server::Server;
-use jsonrpsee::types::{ErrorObject, Request};
-use jsonrpsee::ws_client::WsClientBuilder;
-use jsonrpsee::{MethodResponse, RpcModule, rpc_params};
+use wasi_jsonrpsee::server::Server;
+use wasi_jsonrpsee::types::{ErrorObject, Request};
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::{MethodResponse, RpcModule, rpc_params};
 use std::net::SocketAddr;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};

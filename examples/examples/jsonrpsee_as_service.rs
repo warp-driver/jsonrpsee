@@ -24,7 +24,7 @@
 // IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-//! This example shows how to use the `jsonrpsee::server` as
+//! This example shows how to use the `wasi_jsonrpsee::server` as
 //! a tower service such that it's possible to get access
 //! HTTP related things by launching a `hyper::service_fn`.
 //!
@@ -38,17 +38,17 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use futures::FutureExt;
 use hyper::HeaderMap;
 use hyper::header::AUTHORIZATION;
-use jsonrpsee::core::async_trait;
-use jsonrpsee::core::middleware::{Batch, BatchEntry, BatchEntryErr, Notification, RpcServiceBuilder, RpcServiceT};
-use jsonrpsee::http_client::HttpClient;
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::server::middleware::http::{HostFilterLayer, ProxyGetRequestLayer};
-use jsonrpsee::server::{
+use wasi_jsonrpsee::core::async_trait;
+use wasi_jsonrpsee::core::middleware::{Batch, BatchEntry, BatchEntryErr, Notification, RpcServiceBuilder, RpcServiceT};
+use wasi_jsonrpsee::http_client::HttpClient;
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::server::middleware::http::{HostFilterLayer, ProxyGetRequestLayer};
+use wasi_jsonrpsee::server::{
 	ServerConfig, ServerHandle, StopHandle, TowerServiceBuilder, serve_with_graceful_shutdown, stop_channel,
 };
-use jsonrpsee::types::{ErrorObject, ErrorObjectOwned, Request};
-use jsonrpsee::ws_client::{HeaderValue, WsClientBuilder};
-use jsonrpsee::{MethodResponse, Methods};
+use wasi_jsonrpsee::types::{ErrorObject, ErrorObjectOwned, Request};
+use wasi_jsonrpsee::ws_client::{HeaderValue, WsClientBuilder};
+use wasi_jsonrpsee::{MethodResponse, Methods};
 use tokio::net::TcpListener;
 use tower::Service;
 use tower_http::cors::CorsLayer;
@@ -286,7 +286,7 @@ async fn run_server(metrics: Metrics) -> anyhow::Result<ServerHandle> {
 		methods: ().into_rpc().into(),
 		stop_handle: stop_handle.clone(),
 		metrics,
-		svc_builder: jsonrpsee::server::Server::builder()
+		svc_builder: wasi_jsonrpsee::server::Server::builder()
 			.set_config(ServerConfig::builder().max_connections(33).build())
 			.set_http_middleware(
 				tower::ServiceBuilder::new()
@@ -317,7 +317,7 @@ async fn run_server(metrics: Metrics) -> anyhow::Result<ServerHandle> {
 			let per_conn2 = per_conn.clone();
 
 			let svc = tower::service_fn(move |req: hyper::Request<hyper::body::Incoming>| {
-				let is_websocket = jsonrpsee::server::ws::is_upgrade_request(&req);
+				let is_websocket = wasi_jsonrpsee::server::ws::is_upgrade_request(&req);
 				let transport_label = if is_websocket { "ws" } else { "http" };
 				let PerConnection { methods, stop_handle, metrics, svc_builder } = per_conn2.clone();
 

@@ -1,4 +1,4 @@
-use jsonrpsee::{core::RpcResult, proc_macros::rpc};
+use wasi_jsonrpsee::{core::RpcResult, proc_macros::rpc};
 
 #[rpc(client, server, namespace = "myapi")]
 pub trait Rpc {

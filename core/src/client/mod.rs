@@ -49,7 +49,7 @@ use crate::traits::{ToJson, ToRpcParams};
 use core::marker::PhantomData;
 use futures_util::stream::{Stream, StreamExt};
 use http::Extensions;
-use jsonrpsee_types::{ErrorObject, Id, InvalidRequestId, SubscriptionId};
+use wasi_jsonrpsee_types::{ErrorObject, Id, InvalidRequestId, SubscriptionId};
 use serde::Serialize;
 use serde::de::DeserializeOwned;
 use serde_json::value::RawValue;
@@ -673,10 +673,10 @@ impl SubscriptionResponse {
 
 /// A raw JSON-RPC response object which can be either a JSON-RPC success or error response.
 ///
-/// This is a wrapper around the `jsonrpsee_types::Response` type for ease of use
+/// This is a wrapper around the `wasi_jsonrpsee_types::Response` type for ease of use
 /// for middleware client implementations.
 #[derive(Debug)]
-pub struct RawResponse<'a>(jsonrpsee_types::Response<'a, Box<RawValue>>);
+pub struct RawResponse<'a>(wasi_jsonrpsee_types::Response<'a, Box<RawValue>>);
 
 impl Serialize for RawResponse<'_> {
 	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -687,8 +687,8 @@ impl Serialize for RawResponse<'_> {
 	}
 }
 
-impl<'a> From<jsonrpsee_types::Response<'a, Box<RawValue>>> for RawResponse<'a> {
-	fn from(r: jsonrpsee_types::Response<'a, Box<RawValue>>) -> Self {
+impl<'a> From<wasi_jsonrpsee_types::Response<'a, Box<RawValue>>> for RawResponse<'a> {
+	fn from(r: wasi_jsonrpsee_types::Response<'a, Box<RawValue>>) -> Self {
 		Self(r)
 	}
 }
@@ -697,15 +697,15 @@ impl<'a> RawResponse<'a> {
 	/// Whether this response is successful JSON-RPC response.
 	pub fn is_success(&self) -> bool {
 		match self.0.payload {
-			jsonrpsee_types::ResponsePayload::Success(_) => true,
-			jsonrpsee_types::ResponsePayload::Error(_) => false,
+			wasi_jsonrpsee_types::ResponsePayload::Success(_) => true,
+			wasi_jsonrpsee_types::ResponsePayload::Error(_) => false,
 		}
 	}
 
 	/// Extract the error object from the response if it is an error.
 	pub fn as_error(&self) -> Option<&ErrorObject<'_>> {
 		match self.0.payload {
-			jsonrpsee_types::ResponsePayload::Error(ref err) => Some(err),
+			wasi_jsonrpsee_types::ResponsePayload::Error(ref err) => Some(err),
 			_ => None,
 		}
 	}
@@ -715,7 +715,7 @@ impl<'a> RawResponse<'a> {
 	/// Omits JSON-RPC specific fields like `jsonrpc` and `id`.
 	pub fn as_success(&self) -> Option<&RawValue> {
 		match self.0.payload {
-			jsonrpsee_types::ResponsePayload::Success(ref res) => Some(res),
+			wasi_jsonrpsee_types::ResponsePayload::Success(ref res) => Some(res),
 			_ => None,
 		}
 	}
@@ -726,7 +726,7 @@ impl<'a> RawResponse<'a> {
 	}
 
 	/// Consume the response and extract the inner value.
-	pub fn into_inner(self) -> jsonrpsee_types::Response<'a, Box<RawValue>> {
+	pub fn into_inner(self) -> wasi_jsonrpsee_types::Response<'a, Box<RawValue>> {
 		self.0
 	}
 

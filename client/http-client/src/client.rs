@@ -34,22 +34,22 @@ use crate::transport::{self, Error as TransportError, HttpBackend, HttpTransport
 use crate::{HttpRequest, HttpResponse};
 use hyper::body::Bytes;
 use hyper::http::{Extensions, HeaderMap};
-use jsonrpsee_core::client::{
+use wasi_jsonrpsee_core::client::{
 	BatchResponse, ClientT, Error, IdKind, MiddlewareBatchResponse, MiddlewareMethodResponse, MiddlewareNotifResponse,
 	RequestIdManager, Subscription, SubscriptionClientT, generate_batch_id_range,
 };
-use jsonrpsee_core::middleware::layer::{RpcLogger, RpcLoggerLayer};
-use jsonrpsee_core::middleware::{Batch, RpcServiceBuilder, RpcServiceT};
-use jsonrpsee_core::params::BatchRequestBuilder;
-use jsonrpsee_core::traits::ToRpcParams;
-use jsonrpsee_core::{BoxError, TEN_MB_SIZE_BYTES};
-use jsonrpsee_types::{ErrorObject, InvalidRequestId, Notification, Request, ResponseSuccess, TwoPointZero};
+use wasi_jsonrpsee_core::middleware::layer::{RpcLogger, RpcLoggerLayer};
+use wasi_jsonrpsee_core::middleware::{Batch, RpcServiceBuilder, RpcServiceT};
+use wasi_jsonrpsee_core::params::BatchRequestBuilder;
+use wasi_jsonrpsee_core::traits::ToRpcParams;
+use wasi_jsonrpsee_core::{BoxError, TEN_MB_SIZE_BYTES};
+use wasi_jsonrpsee_types::{ErrorObject, InvalidRequestId, Notification, Request, ResponseSuccess, TwoPointZero};
 use serde::de::DeserializeOwned;
 use tokio::sync::Semaphore;
 use tower::layer::util::Identity;
 use tower::{Layer, Service};
 
-#[cfg(feature = "tls")]
+#[cfg(any(feature = "tls", feature = "tls-rustcrypto"))]
 use crate::{CertificateStore, CustomCertStore};
 
 type Logger = tower::layer::util::Stack<RpcLoggerLayer, tower::layer::util::Identity>;
@@ -60,7 +60,7 @@ type Logger = tower::layer::util::Stack<RpcLoggerLayer, tower::layer::util::Iden
 ///
 /// ```no_run
 ///
-/// use jsonrpsee_http_client::{HttpClientBuilder, HeaderMap, HeaderValue};
+/// use wasi_jsonrpsee_http_client::{HttpClientBuilder, HeaderMap, HeaderValue};
 ///
 /// #[tokio::main]
 /// async fn main() {
@@ -82,7 +82,7 @@ pub struct HttpClientBuilder<HttpMiddleware = Identity, RpcMiddleware = Logger> 
 	max_request_size: u32,
 	max_response_size: u32,
 	request_timeout: Duration,
-	#[cfg(feature = "tls")]
+	#[cfg(any(feature = "tls", feature = "tls-rustcrypto"))]
 	certificate_store: CertificateStore,
 	id_kind: IdKind,
 	headers: HeaderMap,
@@ -132,7 +132,7 @@ impl<HttpMiddleware, RpcMiddleware> HttpClientBuilder<HttpMiddleware, RpcMiddlew
 	/// # Example
 	///
 	/// ```no_run
-	/// use jsonrpsee_http_client::{HttpClientBuilder, CustomCertStore};
+	/// use wasi_jsonrpsee_http_client::{HttpClientBuilder, CustomCertStore};
 	/// use rustls::{
 	///     client::danger::{self, HandshakeSignatureValid, ServerCertVerified},
 	///     pki_types::{CertificateDer, ServerName, UnixTime},
@@ -185,7 +185,7 @@ impl<HttpMiddleware, RpcMiddleware> HttpClientBuilder<HttpMiddleware, RpcMiddlew
 	/// // client builder with disabled certificate verification.
 	/// let client_builder = HttpClientBuilder::new().with_custom_cert_store(tls_cfg);
 	/// ```
-	#[cfg(feature = "tls")]
+	#[cfg(any(feature = "tls", feature = "tls-rustcrypto"))]
 	pub fn with_custom_cert_store(mut self, cfg: CustomCertStore) -> Self {
 		self.certificate_store = CertificateStore::Custom(cfg);
 		self
@@ -234,7 +234,7 @@ impl<HttpMiddleware, RpcMiddleware> HttpClientBuilder<HttpMiddleware, RpcMiddlew
 	/// Set the RPC middleware.
 	pub fn set_rpc_middleware<T>(self, rpc_builder: RpcServiceBuilder<T>) -> HttpClientBuilder<HttpMiddleware, T> {
 		HttpClientBuilder {
-			#[cfg(feature = "tls")]
+			#[cfg(any(feature = "tls", feature = "tls-rustcrypto"))]
 			certificate_store: self.certificate_store,
 			id_kind: self.id_kind,
 			headers: self.headers,
@@ -257,7 +257,7 @@ impl<HttpMiddleware, RpcMiddleware> HttpClientBuilder<HttpMiddleware, RpcMiddlew
 		service_builder: tower::ServiceBuilder<T>,
 	) -> HttpClientBuilder<T, RpcMiddleware> {
 		HttpClientBuilder {
-			#[cfg(feature = "tls")]
+			#[cfg(any(feature = "tls", feature = "tls-rustcrypto"))]
 			certificate_store: self.certificate_store,
 			id_kind: self.id_kind,
 			headers: self.headers,
@@ -291,7 +291,7 @@ where
 			max_request_size,
 			max_response_size,
 			request_timeout,
-			#[cfg(feature = "tls")]
+			#[cfg(any(feature = "tls", feature = "tls-rustcrypto"))]
 			certificate_store,
 			id_kind,
 			headers,
@@ -313,7 +313,7 @@ where
 			keep_alive_duration,
 			keep_alive_interval,
 			keep_alive_retries,
-			#[cfg(feature = "tls")]
+			#[cfg(any(feature = "tls", feature = "tls-rustcrypto"))]
 			certificate_store,
 		}
 		.build(target)
@@ -338,7 +338,7 @@ impl Default for HttpClientBuilder {
 			max_request_size: TEN_MB_SIZE_BYTES,
 			max_response_size: TEN_MB_SIZE_BYTES,
 			request_timeout: Duration::from_secs(60),
-			#[cfg(feature = "tls")]
+			#[cfg(any(feature = "tls", feature = "tls-rustcrypto"))]
 			certificate_store: CertificateStore::Native,
 			id_kind: IdKind::Number,
 			headers: HeaderMap::new(),
@@ -441,7 +441,7 @@ where
 	fn batch_request<'a, R>(
 		&self,
 		batch: BatchRequestBuilder<'a>,
-	) -> impl Future<Output = Result<jsonrpsee_core::client::BatchResponse<'a, R>, Error>> + Send
+	) -> impl Future<Output = Result<wasi_jsonrpsee_core::client::BatchResponse<'a, R>, Error>> + Send
 	where
 		R: DeserializeOwned + fmt::Debug + 'a,
 	{

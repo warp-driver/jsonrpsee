@@ -29,7 +29,7 @@
 use rand::{distr::Alphanumeric, Rng};
 
 use crate::traits::IdProvider;
-use jsonrpsee_types::SubscriptionId;
+use wasi_jsonrpsee_types::SubscriptionId;
 
 /// Generates random integers as subscription ID.
 #[derive(Debug, Copy, Clone)]

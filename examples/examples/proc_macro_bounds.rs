@@ -26,11 +26,11 @@
 
 use std::net::SocketAddr;
 
-use jsonrpsee::core::async_trait;
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::server::Server;
-use jsonrpsee::types::ErrorObjectOwned;
-use jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::core::async_trait;
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::server::Server;
+use wasi_jsonrpsee::types::ErrorObjectOwned;
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
 type ExampleHash = [u8; 32];
 
 pub trait Config {
@@ -45,12 +45,12 @@ impl Config for ExampleHash {
 /// server implementation requires output types to be bounded by `Serialize`.
 ///
 /// In this example, we don't want the `Conf` to be bounded by default to
-/// `Conf : Send + Sync + 'static + jsonrpsee::core::DeserializeOwned` for client implementation and
-/// `Conf : Send + Sync + 'static + jsonrpsee::core::Serialize` for server implementation.
+/// `Conf : Send + Sync + 'static + wasi_jsonrpsee::core::DeserializeOwned` for client implementation and
+/// `Conf : Send + Sync + 'static + wasi_jsonrpsee::core::Serialize` for server implementation.
 ///
 /// Explicitly, specify client and server bounds to handle the `Serialize` and `DeserializeOwned` cases
 /// just for the `Conf::hash` part.
-#[rpc(server, client, namespace = "foo", client_bounds(T::Hash: jsonrpsee::core::DeserializeOwned), server_bounds(T::Hash: jsonrpsee::core::Serialize + Clone))]
+#[rpc(server, client, namespace = "foo", client_bounds(T::Hash: wasi_jsonrpsee::core::DeserializeOwned), server_bounds(T::Hash: wasi_jsonrpsee::core::Serialize + Clone))]
 pub trait Rpc<T: Config> {
 	#[method(name = "bar")]
 	fn method(&self) -> Result<T::Hash, ErrorObjectOwned>;

@@ -400,15 +400,15 @@ impl RpcDescription {
 	/// Formats the identifier as a path relative to the resolved
 	/// `jsonrpsee` client path.
 	pub(crate) fn jrps_client_item(&self, item: impl quote::ToTokens) -> TokenStream2 {
-		let jsonrpsee = self.jsonrpsee_client_path.as_ref().unwrap();
-		quote! { #jsonrpsee::#item }
+		let wasi_jsonrpsee = self.jsonrpsee_client_path.as_ref().unwrap();
+		quote! { #wasi_jsonrpsee::#item }
 	}
 
 	/// Formats the identifier as a path relative to the resolved
 	/// `jsonrpsee` server path.
 	pub(crate) fn jrps_server_item(&self, item: impl quote::ToTokens) -> TokenStream2 {
-		let jsonrpsee = self.jsonrpsee_server_path.as_ref().unwrap();
-		quote! { #jsonrpsee::#item }
+		let wasi_jsonrpsee = self.jsonrpsee_server_path.as_ref().unwrap();
+		quote! { #wasi_jsonrpsee::#item }
 	}
 
 	/// Based on the namespace and separator, renders the full name of the RPC method/subscription.

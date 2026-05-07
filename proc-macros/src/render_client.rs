@@ -33,7 +33,7 @@ use syn::{AngleBracketedGenericArguments, FnArg, Ident, Pat, PatIdent, PatType, 
 
 impl RpcDescription {
 	pub(super) fn render_client(&self) -> Result<TokenStream2, syn::Error> {
-		let jsonrpsee = self.jsonrpsee_client_path.as_ref().unwrap();
+		let wasi_jsonrpsee = self.jsonrpsee_client_path.as_ref().unwrap();
 		let sub_tys: Vec<syn::Type> = self.subscriptions.clone().into_iter().map(|s| s.item).collect();
 
 		let trait_name = quote::format_ident!("{}Client", &self.trait_def.ident);
@@ -42,9 +42,9 @@ impl RpcDescription {
 		let (impl_generics, type_generics, _) = self.trait_def.generics.split_for_impl();
 
 		let super_trait = if self.subscriptions.is_empty() {
-			quote! { #jsonrpsee::core::client::ClientT }
+			quote! { #wasi_jsonrpsee::core::client::ClientT }
 		} else {
-			quote! { #jsonrpsee::core::client::SubscriptionClientT }
+			quote! { #wasi_jsonrpsee::core::client::SubscriptionClientT }
 		};
 
 		let method_impls =
@@ -90,7 +90,7 @@ impl RpcDescription {
 				return quote_spanned!(args.span() => compile_error!("Result must be have two arguments"));
 			}
 
-			// Force the last argument to be `jsonrpsee::core::ClientError`:
+			// Force the last argument to be `wasi_jsonrpsee::core::ClientError`:
 			let error_arg = args.last_mut().unwrap();
 			*error_arg =
 				syn::GenericArgument::Type(syn::Type::Verbatim(self.jrps_client_item(quote! { core::client::Error })));
@@ -125,7 +125,7 @@ impl RpcDescription {
 	}
 
 	fn render_method(&self, method: &RpcMethod) -> Result<TokenStream2, syn::Error> {
-		// `jsonrpsee::Error`
+		// `wasi_jsonrpsee::Error`
 		let jrps_error = self.jrps_client_item(quote! { core::client::Error });
 		// Rust method to invoke (e.g. `self.<foo>(...)`).
 		let rust_method_name = &method.signature.sig.ident;
@@ -136,7 +136,7 @@ impl RpcDescription {
 		let rpc_method_name = self.rpc_identifier(&method.name);
 
 		// Called method is either `request` or `notification`.
-		// `returns` represent the return type of the *rust method* (`Result<T, jsonrpsee::core::ClientError>`).
+		// `returns` represent the return type of the *rust method* (`Result<T, wasi_jsonrpsee::core::ClientError>`).
 		let (called_method, returns) = if let Some(returns) = &method.returns {
 			let called_method = quote::format_ident!("request");
 			let returns = self.return_result_type(returns.clone());
@@ -171,7 +171,7 @@ impl RpcDescription {
 	}
 
 	fn render_sub(&self, sub: &RpcSubscription) -> Result<TokenStream2, syn::Error> {
-		// `jsonrpsee::core::ClientError`
+		// `wasi_jsonrpsee::core::ClientError`
 		let jrps_error = self.jrps_client_item(quote! { core::client::Error });
 		// Rust method to invoke (e.g. `self.<foo>(...)`).
 		let rust_method_name = &sub.signature.sig.ident;
@@ -208,14 +208,14 @@ impl RpcDescription {
 	fn encode_params(&self, params: &[RpcFnArg], param_kind: &ParamKind, signature: &syn::TraitItemFn) -> TokenStream2 {
 		const ILLEGAL_PARAM_NAME: &str = "__RpcParams__";
 
-		let jsonrpsee = self.jsonrpsee_client_path.as_ref().unwrap();
+		let wasi_jsonrpsee = self.jsonrpsee_client_path.as_ref().unwrap();
 		let p = Ident::new(ILLEGAL_PARAM_NAME, proc_macro2::Span::call_site());
 
 		let reexports = self.jrps_client_item(quote! { core::__reexports });
 
 		if params.is_empty() {
 			return quote!({
-				#jsonrpsee::core::params::ArrayParams::new()
+				#wasi_jsonrpsee::core::params::ArrayParams::new()
 			});
 		}
 
@@ -247,7 +247,7 @@ impl RpcDescription {
 				}
 
 				quote!({
-					let mut #p = #jsonrpsee::core::params::ObjectParams::new();
+					let mut #p = #wasi_jsonrpsee::core::params::ObjectParams::new();
 					#(
 						if let Err(err) = #p.insert(#params_insert) {
 							#reexports::panic_fail_serialize(stringify!(#params_insert), err);
@@ -261,7 +261,7 @@ impl RpcDescription {
 				let params = params.iter().map(RpcFnArg::arg_pat);
 
 				quote!({
-					let mut #p = #jsonrpsee::core::params::ArrayParams::new();
+					let mut #p = #wasi_jsonrpsee::core::params::ArrayParams::new();
 					#(
 						if let Err(err) = #p.insert(#params) {
 							#reexports::panic_fail_serialize(stringify!(#params), err);

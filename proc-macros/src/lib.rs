@@ -104,7 +104,7 @@ pub(crate) mod visitor;
 ///     // Note that `pending_subscription_sink` was added automatically.
 ///     async fn sub(&self, pending: PendingSubscriptionSink) -> SubscriptionResult;
 ///
-///     fn into_rpc(self) -> Result<Self, jsonrpsee::core::Error> {
+///     fn into_rpc(self) -> Result<Self, wasi_jsonrpsee::core::Error> {
 ///         // Actual implementation stripped, but inside we will create
 ///         // a module with one method and one subscription
 ///     }
@@ -204,7 +204,7 @@ pub(crate) mod visitor;
 /// Rust method marked with the `subscription` attribute **must**:
 ///
 /// - be asynchronous;
-/// - return a type that implements `jsonrpsee::server::IntoSubscriptionCloseResponse`.
+/// - return a type that implements `wasi_jsonrpsee::server::IntoSubscriptionCloseResponse`.
 ///
 /// Rust method marked with `subscription` attribute **may**:
 ///
@@ -227,13 +227,13 @@ pub(crate) mod visitor;
 /// use std::net::SocketAddr;
 ///
 /// use futures_channel::oneshot;
-/// use jsonrpsee::{ws_client::*, server::ServerBuilder};
+/// use wasi_jsonrpsee::{ws_client::*, server::ServerBuilder};
 ///
 /// // RPC is put into a separate module to clearly show names of generated entities.
 /// mod rpc_impl {
-///     use jsonrpsee::{proc_macros::rpc, Extensions};
-///     use jsonrpsee::server::{PendingSubscriptionSink, SubscriptionMessage, IntoSubscriptionCloseResponse, SubscriptionCloseResponse};
-///     use jsonrpsee::core::{async_trait, RpcResult, SubscriptionResult, to_json_raw_value};
+///     use wasi_jsonrpsee::{proc_macros::rpc, Extensions};
+///     use wasi_jsonrpsee::server::{PendingSubscriptionSink, SubscriptionMessage, IntoSubscriptionCloseResponse, SubscriptionCloseResponse};
+///     use wasi_jsonrpsee::core::{async_trait, RpcResult, SubscriptionResult, to_json_raw_value};
 ///
 ///     enum CloseResponse {
 ///         None,

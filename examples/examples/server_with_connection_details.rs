@@ -26,13 +26,13 @@
 
 use std::net::SocketAddr;
 
-use jsonrpsee::core::middleware::{Batch, Notification, Request, RpcServiceT};
-use jsonrpsee::core::{SubscriptionResult, async_trait};
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::server::PendingSubscriptionSink;
-use jsonrpsee::types::{ErrorObject, ErrorObjectOwned};
-use jsonrpsee::ws_client::WsClientBuilder;
-use jsonrpsee::{ConnectionId, Extensions};
+use wasi_jsonrpsee::core::middleware::{Batch, Notification, Request, RpcServiceT};
+use wasi_jsonrpsee::core::{SubscriptionResult, async_trait};
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::server::PendingSubscriptionSink;
+use wasi_jsonrpsee::types::{ErrorObject, ErrorObjectOwned};
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::{ConnectionId, Extensions};
 
 #[rpc(server, client)]
 pub trait Rpc {
@@ -143,9 +143,9 @@ async fn main() -> anyhow::Result<()> {
 }
 
 async fn run_server() -> anyhow::Result<SocketAddr> {
-	let rpc_middleware = jsonrpsee::server::middleware::rpc::RpcServiceBuilder::new().layer_fn(LoggingMiddleware);
+	let rpc_middleware = wasi_jsonrpsee::server::middleware::rpc::RpcServiceBuilder::new().layer_fn(LoggingMiddleware);
 
-	let server = jsonrpsee::server::Server::builder().set_rpc_middleware(rpc_middleware).build("127.0.0.1:0").await?;
+	let server = wasi_jsonrpsee::server::Server::builder().set_rpc_middleware(rpc_middleware).build("127.0.0.1:0").await?;
 	let addr = server.local_addr()?;
 
 	let handle = server.start(RpcServerImpl.into_rpc());

@@ -45,17 +45,17 @@ use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::{Arc, Mutex};
 
 use futures::FutureExt;
-use jsonrpsee::core::async_trait;
-use jsonrpsee::core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
-use jsonrpsee::http_client::HttpClient;
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::server::{
+use wasi_jsonrpsee::core::async_trait;
+use wasi_jsonrpsee::core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
+use wasi_jsonrpsee::http_client::HttpClient;
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::server::{
 	ConnectionGuard, ConnectionState, ServerConfig, ServerHandle, StopHandle, http, serve_with_graceful_shutdown,
 	stop_channel, ws,
 };
-use jsonrpsee::types::{ErrorObject, ErrorObjectOwned, Id, Request};
-use jsonrpsee::ws_client::WsClientBuilder;
-use jsonrpsee::{MethodResponse, Methods};
+use wasi_jsonrpsee::types::{ErrorObject, ErrorObjectOwned, Id, Request};
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::{MethodResponse, Methods};
 use tokio::net::TcpListener;
 use tokio::sync::Mutex as AsyncMutex;
 use tokio::sync::mpsc;
@@ -325,7 +325,7 @@ async fn run_server() -> anyhow::Result<ServerHandle> {
 
 					// There is another API for making call with just a service as well.
 					//
-					// See [`jsonrpsee::server::http::call_with_service`]
+					// See [`wasi_jsonrpsee::server::http::call_with_service`]
 					async move {
 						tokio::select! {
 							// Rpc call finished successfully.

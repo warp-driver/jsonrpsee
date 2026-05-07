@@ -26,11 +26,11 @@
 
 use std::net::SocketAddr;
 
-use jsonrpsee::core::client::ClientT;
-use jsonrpsee::core::middleware::RpcServiceBuilder;
-use jsonrpsee::server::Server;
-use jsonrpsee::ws_client::{WsClient, WsClientBuilder};
-use jsonrpsee::{RpcModule, rpc_params};
+use wasi_jsonrpsee::core::client::ClientT;
+use wasi_jsonrpsee::core::middleware::RpcServiceBuilder;
+use wasi_jsonrpsee::server::Server;
+use wasi_jsonrpsee::ws_client::{WsClient, WsClientBuilder};
+use wasi_jsonrpsee::{RpcModule, rpc_params};
 use tracing_subscriber::util::SubscriberInitExt;
 
 #[tokio::main]

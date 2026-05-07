@@ -26,14 +26,14 @@
 
 use crate::HttpClientBuilder;
 use crate::types::error::{ErrorCode, ErrorObject};
-use jsonrpsee_core::ClientError;
-use jsonrpsee_core::client::{BatchResponse, ClientT, IdKind};
-use jsonrpsee_core::params::BatchRequestBuilder;
-use jsonrpsee_core::{DeserializeOwned, rpc_params};
-use jsonrpsee_test_utils::TimeoutFutureExt;
-use jsonrpsee_test_utils::helpers::*;
-use jsonrpsee_test_utils::mocks::Id;
-use jsonrpsee_types::error::ErrorObjectOwned;
+use wasi_jsonrpsee_core::ClientError;
+use wasi_jsonrpsee_core::client::{BatchResponse, ClientT, IdKind};
+use wasi_jsonrpsee_core::params::BatchRequestBuilder;
+use wasi_jsonrpsee_core::{DeserializeOwned, rpc_params};
+use wasi_jsonrpsee_test_utils::TimeoutFutureExt;
+use wasi_jsonrpsee_test_utils::helpers::*;
+use wasi_jsonrpsee_test_utils::mocks::Id;
+use wasi_jsonrpsee_types::error::ErrorObjectOwned;
 
 fn init_logger() {
 	let _ = tracing_subscriber::FmtSubscriber::builder()
@@ -251,10 +251,10 @@ async fn batch_request_out_of_order_response() {
 	assert_eq!(response, vec!["hello".to_string(), "goodbye".to_string(), "here's your swag".to_string()]);
 }
 
-async fn run_batch_request_with_response<T: Send + DeserializeOwned + std::fmt::Debug + Clone + 'static>(
-	batch: BatchRequestBuilder<'_>,
+async fn run_batch_request_with_response<'a, T: Send + DeserializeOwned + std::fmt::Debug + Clone + 'static>(
+	batch: BatchRequestBuilder<'a>,
 	response: String,
-) -> Result<BatchResponse<T>, ClientError> {
+) -> Result<BatchResponse<'a, T>, ClientError> {
 	let server_addr = http_server_with_hardcoded_response(response).with_default_timeout().await.unwrap();
 	let uri = format!("http://{server_addr}");
 	let client = HttpClientBuilder::default().build(&uri).unwrap();

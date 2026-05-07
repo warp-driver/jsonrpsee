@@ -35,16 +35,16 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicU32, Ordering};
 
 use futures::FutureExt;
-use jsonrpsee::core::middleware::RpcServiceBuilder;
-use jsonrpsee::core::{SubscriptionResult, async_trait};
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::server::{
+use wasi_jsonrpsee::core::middleware::RpcServiceBuilder;
+use wasi_jsonrpsee::core::{SubscriptionResult, async_trait};
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::server::{
 	ConnectionGuard, ConnectionState, HttpRequest, ServerConfig, ServerHandle, StopHandle, http,
 	serve_with_graceful_shutdown, stop_channel, ws,
 };
-use jsonrpsee::types::ErrorObjectOwned;
-use jsonrpsee::ws_client::WsClientBuilder;
-use jsonrpsee::{Extensions, Methods, PendingSubscriptionSink};
+use wasi_jsonrpsee::types::ErrorObjectOwned;
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::{Extensions, Methods, PendingSubscriptionSink};
 use tokio::net::TcpListener;
 use tokio::sync::mpsc;
 use tracing_subscriber::util::SubscriberInitExt;
@@ -198,7 +198,7 @@ async fn run_server() -> anyhow::Result<ServerHandle> {
 				} else if !ws::is_upgrade_request(&req) {
 					// There is another API for making call with just a service as well.
 					//
-					// See [`jsonrpsee::server::http::call_with_service`]
+					// See [`wasi_jsonrpsee::server::http::call_with_service`]
 					async move {
 						tokio::select! {
 							// RPC call finished successfully.

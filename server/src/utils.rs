@@ -32,7 +32,7 @@ use crate::{HttpBody, HttpRequest};
 
 use futures_util::future::{self, Either};
 use hyper_util::rt::{TokioExecutor, TokioIo};
-use jsonrpsee_core::BoxError;
+use wasi_jsonrpsee_core::BoxError;
 use pin_project::pin_project;
 use tower::ServiceExt;
 use tower::util::Oneshot;
@@ -145,7 +145,7 @@ where
 pub mod deserialize_with_ext {
 	/// Method call.
 	pub mod call {
-		use jsonrpsee_types::Request;
+		use wasi_jsonrpsee_types::Request;
 
 		/// Wrapper over `serde_json::from_slice` that sets the extensions.
 		pub fn from_slice<'a>(
@@ -167,7 +167,7 @@ pub mod deserialize_with_ext {
 
 	/// Notification.
 	pub mod notif {
-		use jsonrpsee_types::Notification;
+		use wasi_jsonrpsee_types::Notification;
 
 		/// Wrapper over `serde_json::from_slice` that sets the extensions.
 		pub fn from_slice<'a, T>(

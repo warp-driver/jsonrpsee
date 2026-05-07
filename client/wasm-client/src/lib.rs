@@ -30,15 +30,15 @@
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![cfg(target_arch = "wasm32")]
 
-pub use jsonrpsee_core::client::Client;
-pub use jsonrpsee_types as types;
+pub use wasi_jsonrpsee_core::client::Client;
+pub use wasi_jsonrpsee_types as types;
 
 use std::time::Duration;
 
-use jsonrpsee_client_transport::web;
-use jsonrpsee_core::client::async_client::RpcService;
-use jsonrpsee_core::client::{Error, IdKind};
-use jsonrpsee_core::middleware::{RpcServiceBuilder, layer::RpcLoggerLayer};
+use wasi_jsonrpsee_client_transport::web;
+use wasi_jsonrpsee_core::client::async_client::RpcService;
+use wasi_jsonrpsee_core::client::{Error, IdKind};
+use wasi_jsonrpsee_core::middleware::{RpcServiceBuilder, layer::RpcLoggerLayer};
 
 type Logger = tower::layer::util::Stack<RpcLoggerLayer, tower::layer::util::Identity>;
 
@@ -48,7 +48,7 @@ type Logger = tower::layer::util::Stack<RpcLoggerLayer, tower::layer::util::Iden
 ///
 /// ```no_run
 ///
-/// use jsonrpsee_wasm_client::WasmClientBuilder;
+/// use wasi_jsonrpsee_wasm_client::WasmClientBuilder;
 ///
 /// #[tokio::main]
 /// async fn main() {

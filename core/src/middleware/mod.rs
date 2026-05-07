@@ -8,7 +8,7 @@ use std::pin::Pin;
 use std::task::{Context, Poll};
 
 use futures_util::future::Either;
-use jsonrpsee_types::{ErrorObject, Id};
+use wasi_jsonrpsee_types::{ErrorObject, Id};
 use pin_project::pin_project;
 use serde::Serialize;
 use serde::ser::SerializeSeq;
@@ -16,28 +16,28 @@ use serde_json::value::RawValue;
 use tower::layer::LayerFn;
 use tower::layer::util::{Identity, Stack};
 
-/// Re-export types from `jsonrpsee_types` crate for convenience.
-pub type Notification<'a> = jsonrpsee_types::Notification<'a, Option<Cow<'a, RawValue>>>;
-/// Re-export types from `jsonrpsee_types` crate for convenience.
-pub use jsonrpsee_types::{Extensions, Request};
+/// Re-export types from `wasi_jsonrpsee_types` crate for convenience.
+pub type Notification<'a> = wasi_jsonrpsee_types::Notification<'a, Option<Cow<'a, RawValue>>>;
+/// Re-export types from `wasi_jsonrpsee_types` crate for convenience.
+pub use wasi_jsonrpsee_types::{Extensions, Request};
 
 /// Error response that can used to indicate an error in JSON-RPC request batch request.
 /// This is used in the [`Batch`] type to indicate an error in the batch entry.
 #[derive(Debug)]
-pub struct BatchEntryErr<'a>(jsonrpsee_types::Response<'a, ()>);
+pub struct BatchEntryErr<'a>(wasi_jsonrpsee_types::Response<'a, ()>);
 
 impl<'a> BatchEntryErr<'a> {
 	/// Create a new error response.
 	pub fn new(id: Id<'a>, err: ErrorObject<'a>) -> Self {
-		let payload = jsonrpsee_types::ResponsePayload::Error(err);
-		let response = jsonrpsee_types::Response::new(payload, id);
+		let payload = wasi_jsonrpsee_types::ResponsePayload::Error(err);
+		let response = wasi_jsonrpsee_types::Response::new(payload, id);
 		Self(response)
 	}
 
 	/// Get the parts of the error response.q
 	pub fn into_parts(self) -> (ErrorObject<'a>, Id<'a>) {
 		let err = match self.0.payload {
-			jsonrpsee_types::ResponsePayload::Error(err) => err,
+			wasi_jsonrpsee_types::ResponsePayload::Error(err) => err,
 			_ => unreachable!("BatchEntryErr can only be created from error payload; qed"),
 		};
 		(err, self.0.id)
@@ -413,12 +413,12 @@ where
 
 #[cfg(test)]
 mod tests {
-	use jsonrpsee_types::{ErrorCode, ErrorObject};
+	use wasi_jsonrpsee_types::{ErrorCode, ErrorObject};
 
 	#[test]
 	fn serialize_batch_entry() {
 		use super::{BatchEntry, Notification, Request};
-		use jsonrpsee_types::Id;
+		use wasi_jsonrpsee_types::Id;
 
 		let req = Request::borrowed("say_hello", None, Id::Number(1));
 		let batch_entry = BatchEntry::Call(req.clone());
@@ -438,7 +438,7 @@ mod tests {
 	#[test]
 	fn serialize_batch_works() {
 		use super::{Batch, BatchEntry, BatchEntryErr, Notification, Request};
-		use jsonrpsee_types::Id;
+		use wasi_jsonrpsee_types::Id;
 
 		let req = Request::borrowed("say_hello", None, Id::Number(1));
 		let notification = Notification::new("say_hello".into(), None);

@@ -32,9 +32,9 @@ use crate::server::LOG_TARGET;
 use crate::server::error::{DisconnectError, PendingSubscriptionAcceptError, SendTimeoutError, TrySendError};
 use crate::server::rpc_module::ConnectionId;
 use crate::{error::SubscriptionError, traits::IdProvider};
-use jsonrpsee_types::SubscriptionPayload;
-use jsonrpsee_types::response::SubscriptionPayloadError;
-use jsonrpsee_types::{ErrorObjectOwned, Id, SubscriptionId, SubscriptionResponse};
+use wasi_jsonrpsee_types::SubscriptionPayload;
+use wasi_jsonrpsee_types::response::SubscriptionPayloadError;
+use wasi_jsonrpsee_types::{ErrorObjectOwned, Id, SubscriptionId, SubscriptionResponse};
 use parking_lot::Mutex;
 use rustc_hash::FxHashMap;
 use serde::{Serialize, de::DeserializeOwned};
@@ -213,7 +213,7 @@ pub struct PendingSubscriptionSink {
 
 impl PendingSubscriptionSink {
 	/// Reject the subscription by responding to the subscription method call with
-	/// the error message from [`jsonrpsee_types::error::ErrorObject`].
+	/// the error message from [`wasi_jsonrpsee_types::error::ErrorObject`].
 	///
 	/// # Note
 	///
@@ -444,7 +444,7 @@ impl Subscription {
 		let res = match serde_json::from_str::<SubscriptionResponse<T>>(raw.get()) {
 			Ok(r) => Some(Ok((r.params.result, r.params.subscription.into_owned()))),
 			Err(e) => {
-				match serde_json::from_str::<jsonrpsee_types::response::SubscriptionError<&RawValue>>(raw.get()) {
+				match serde_json::from_str::<wasi_jsonrpsee_types::response::SubscriptionError<&RawValue>>(raw.get()) {
 					Ok(_) => None,
 					Err(_) => Some(Err(e.into())),
 				}
@@ -509,7 +509,7 @@ pub(crate) fn sub_message_to_json(msg: SubscriptionMessage, sub_id: &Subscriptio
 }
 
 pub(crate) fn sub_err_to_json(error: SubscriptionError, sub_id: SubscriptionId, method: &str) -> Box<RawValue> {
-	serde_json::value::to_raw_value(&jsonrpsee_types::response::SubscriptionError::new(
+	serde_json::value::to_raw_value(&wasi_jsonrpsee_types::response::SubscriptionError::new(
 		method.into(),
 		SubscriptionPayloadError { subscription: sub_id, error },
 	))
