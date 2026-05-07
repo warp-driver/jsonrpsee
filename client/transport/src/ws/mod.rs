@@ -32,9 +32,9 @@ use std::time::Duration;
 
 use base64::Engine;
 use futures_util::io::{BufReader, BufWriter};
-use jsonrpsee_core::Cow;
-use jsonrpsee_core::TEN_MB_SIZE_BYTES;
-use jsonrpsee_core::client::{ReceivedMessage, TransportReceiverT, TransportSenderT};
+use wasi_jsonrpsee_core::Cow;
+use wasi_jsonrpsee_core::TEN_MB_SIZE_BYTES;
+use wasi_jsonrpsee_core::client::{ReceivedMessage, TransportReceiverT, TransportSenderT};
 use soketto::connection::CloseReason;
 use soketto::connection::Error::Utf8;
 use soketto::data::ByteSlice125;

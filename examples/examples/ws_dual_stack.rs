@@ -24,10 +24,10 @@
 // IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use jsonrpsee::core::client::ClientT;
-use jsonrpsee::server::{ServerHandle, serve_with_graceful_shutdown, stop_channel};
-use jsonrpsee::ws_client::WsClientBuilder;
-use jsonrpsee::{RpcModule, rpc_params};
+use wasi_jsonrpsee::core::client::ClientT;
+use wasi_jsonrpsee::server::{ServerHandle, serve_with_graceful_shutdown, stop_channel};
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::{RpcModule, rpc_params};
 use std::net::SocketAddr;
 use tokio::net::TcpListener;
 use tracing_subscriber::util::SubscriberInitExt;
@@ -79,7 +79,7 @@ async fn run_server() -> anyhow::Result<(ServerHandle, Addrs)> {
 
 	// Create and finalize a server configuration from a TowerServiceBuilder
 	// given an RpcModule and the stop handle.
-	let svc = jsonrpsee::server::Server::builder().to_service_builder().build(module, stop_hdl.clone());
+	let svc = wasi_jsonrpsee::server::Server::builder().to_service_builder().build(module, stop_hdl.clone());
 
 	tokio::spawn(async move {
 		loop {

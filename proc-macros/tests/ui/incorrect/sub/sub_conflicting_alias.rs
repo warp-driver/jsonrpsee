@@ -1,4 +1,4 @@
-use jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::proc_macros::rpc;
 
 #[rpc(client, server)]
 pub trait DuplicatedSubAlias {

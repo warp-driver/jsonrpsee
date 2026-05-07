@@ -28,11 +28,11 @@ use std::net::SocketAddr;
 use std::time::Duration;
 
 use futures::{Stream, StreamExt};
-use jsonrpsee::core::DeserializeOwned;
-use jsonrpsee::core::client::{Subscription, SubscriptionClientT};
-use jsonrpsee::rpc_params;
-use jsonrpsee::server::{RpcModule, Server};
-use jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::core::DeserializeOwned;
+use wasi_jsonrpsee::core::client::{Subscription, SubscriptionClientT};
+use wasi_jsonrpsee::rpc_params;
+use wasi_jsonrpsee::server::{RpcModule, Server};
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
 use tokio_stream::wrappers::BroadcastStream;
 use tokio_stream::wrappers::errors::BroadcastStreamRecvError;
 

@@ -26,11 +26,11 @@
 
 use std::net::SocketAddr;
 
-use jsonrpsee::core::client::ClientT;
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::server::Server;
-use jsonrpsee::ws_client::WsClientBuilder;
-use jsonrpsee::{ResponsePayload, rpc_params};
+use wasi_jsonrpsee::core::client::ClientT;
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::server::Server;
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::{ResponsePayload, rpc_params};
 
 #[rpc(client, server, namespace = "state")]
 pub trait Rpc {

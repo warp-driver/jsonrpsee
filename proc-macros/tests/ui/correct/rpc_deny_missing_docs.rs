@@ -2,8 +2,8 @@
 
 #![deny(missing_docs)]
 
-use jsonrpsee::core::RpcResult;
-use jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::core::RpcResult;
+use wasi_jsonrpsee::proc_macros::rpc;
 
 #[rpc(client, server)]
 pub trait ApiWithDocumentation {

@@ -24,7 +24,7 @@
 // IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use jsonrpsee_types::SubscriptionId;
+use wasi_jsonrpsee_types::SubscriptionId;
 use serde::Serialize;
 use serde_json::value::RawValue;
 
@@ -42,7 +42,7 @@ use serde_json::value::RawValue;
 /// ## Implementation for hard-coded strings
 ///
 /// ```rust
-/// use jsonrpsee_core::traits::ToRpcParams;
+/// use wasi_jsonrpsee_core::traits::ToRpcParams;
 /// use serde_json::value::RawValue;
 ///
 /// struct ManualParam;
@@ -58,7 +58,7 @@ use serde_json::value::RawValue;
 /// ## Implementation for JSON serializable structures
 ///
 /// ```rust
-/// use jsonrpsee_core::traits::ToRpcParams;
+/// use wasi_jsonrpsee_core::traits::ToRpcParams;
 /// use serde_json::value::RawValue;
 /// use serde::Serialize;
 ///

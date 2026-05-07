@@ -26,7 +26,7 @@
 
 use std::time::Duration;
 
-use jsonrpsee_types::{ErrorCode, ErrorObject, Id, InvalidRequest, Response, ResponsePayload};
+use wasi_jsonrpsee_types::{ErrorCode, ErrorObject, Id, InvalidRequest, Response, ResponsePayload};
 use serde_json::value::RawValue;
 use tokio::sync::mpsc;
 

@@ -1,5 +1,5 @@
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::core::RpcResult;
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::core::RpcResult;
 #[rpc(client, server)]
 pub trait DuplicatedAlias {
 	#[method(name = "foo", aliases = ["foo_dup", "foo_dup"])]

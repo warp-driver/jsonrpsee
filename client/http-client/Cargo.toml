@@ -1,5 +1,5 @@
 [package]
-name = "jsonrpsee-http-client"
+name = "wasi-jsonrpsee-http-client"
 description = "JSON-RPC HTTP client"
 version.workspace = true
 authors.workspace = true
@@ -26,8 +26,8 @@ hyper-rustls = { workspace = true, features = ["http1", "http2", "tls12", "loggi
 hyper-util = { workspace = true, features = ["client", "client-legacy", "tokio", "http1", "http2"] }
 http-body = { workspace = true }
 log = { workspace = true }
-jsonrpsee-types = { workspace = true }
-jsonrpsee-core = { workspace = true, features = ["client", "http-helpers"] }
+wasi-jsonrpsee-types = { workspace = true }
+wasi-jsonrpsee-core = { workspace = true, features = ["client", "http-helpers"] }
 rustls = { workspace = true, optional = true, features = ["logging", "std", "tls12"] }
 rustls-platform-verifier = { workspace = true, optional = true }
 rustls-rustcrypto = { workspace = true, optional = true }
@@ -41,7 +41,7 @@ url = { workspace = true }
 
 [dev-dependencies]
 tracing-subscriber = { workspace = true }
-jsonrpsee-test-utils = { path = "../../test-utils" }
+wasi-jsonrpsee-test-utils = { path = "../../test-utils" }
 tokio = { workspace = true, features = ["macros"] }
 
 [target.'cfg(not(all(target_os = "wasi", target_env = "p2")))'.dev-dependencies]

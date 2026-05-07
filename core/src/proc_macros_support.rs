@@ -1,4 +1,4 @@
-use jsonrpsee_types::ErrorObjectOwned;
+use wasi_jsonrpsee_types::ErrorObjectOwned;
 
 // We're marking functions on the error paths as #[cold] to both reduce chance of inlining and to
 // make the generated assembly slightly better.

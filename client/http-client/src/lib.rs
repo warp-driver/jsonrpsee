@@ -80,19 +80,19 @@ mod tests;
 
 pub use client::{HttpClient, HttpClientBuilder};
 pub use hyper::http::{HeaderMap, HeaderValue};
-pub use jsonrpsee_types as types;
+pub use wasi_jsonrpsee_types as types;
 
-/// This is the default implementation of the [`jsonrpsee_core::middleware::RpcServiceT`] trait used in the [`HttpClient`].
+/// This is the default implementation of the [`wasi_jsonrpsee_core::middleware::RpcServiceT`] trait used in the [`HttpClient`].
 pub use rpc_service::RpcService;
 /// Default HTTP body for the client.
-pub type HttpBody = jsonrpsee_core::http_helpers::Body;
+pub type HttpBody = wasi_jsonrpsee_core::http_helpers::Body;
 /// HTTP request with default body.
-pub type HttpRequest<T = HttpBody> = jsonrpsee_core::http_helpers::Request<T>;
+pub type HttpRequest<T = HttpBody> = wasi_jsonrpsee_core::http_helpers::Request<T>;
 /// HTTP response with default body.
-pub type HttpResponse<T = HttpBody> = jsonrpsee_core::http_helpers::Response<T>;
+pub type HttpResponse<T = HttpBody> = wasi_jsonrpsee_core::http_helpers::Response<T>;
 
-pub use jsonrpsee_core::middleware::layer::{RpcLogger, RpcLoggerLayer};
-pub use jsonrpsee_core::middleware::{RpcServiceBuilder, RpcServiceT};
+pub use wasi_jsonrpsee_core::middleware::layer::{RpcLogger, RpcLoggerLayer};
+pub use wasi_jsonrpsee_core::middleware::{RpcServiceBuilder, RpcServiceT};
 pub use transport::{HttpBackend, HttpTransportClient};
 
 /// Custom TLS configuration.

@@ -28,7 +28,7 @@
 //! with access control allowing requests from all hosts.
 
 use hyper::Method;
-use jsonrpsee::server::{RpcModule, Server};
+use wasi_jsonrpsee::server::{RpcModule, Server};
 use std::net::SocketAddr;
 use tower_http::cors::{Any, CorsLayer};
 

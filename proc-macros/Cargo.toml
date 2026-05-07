@@ -1,5 +1,5 @@
 [package]
-name = "jsonrpsee-proc-macros"
+name = "wasi-jsonrpsee-proc-macros"
 description = "Procedueral macros for jsonrpsee"
 version.workspace = true
 authors.workspace = true
@@ -27,7 +27,7 @@ proc-macro-crate = { workspace = true }
 heck = { workspace = true }
 
 [dev-dependencies]
-jsonrpsee = { path = "../jsonrpsee", features = ["server", "client-core", "http-client", "ws-client", "macros"] }
+wasi-jsonrpsee = { path = "../jsonrpsee", features = ["server", "client-core", "http-client", "ws-client", "macros"] }
 hyper = { workspace = true }
 hyper-util = { workspace = true, features = ["client", "client-legacy"]}
 futures-channel = { workspace = true }

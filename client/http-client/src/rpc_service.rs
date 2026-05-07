@@ -1,12 +1,12 @@
 use std::sync::Arc;
 
 use hyper::body::Bytes;
-use jsonrpsee_core::{
+use wasi_jsonrpsee_core::{
 	BoxError, JsonRawValue,
 	client::{Error, MiddlewareBatchResponse, MiddlewareMethodResponse, MiddlewareNotifResponse},
 	middleware::{Batch, Notification, Request, RpcServiceT},
 };
-use jsonrpsee_types::Response;
+use wasi_jsonrpsee_types::Response;
 use tower::Service;
 
 use crate::{

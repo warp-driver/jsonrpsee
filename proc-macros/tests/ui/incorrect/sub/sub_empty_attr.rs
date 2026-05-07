@@ -1,4 +1,4 @@
-use jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::proc_macros::rpc;
 
 // Missing all the mandatory fields.
 #[rpc(client, server)]

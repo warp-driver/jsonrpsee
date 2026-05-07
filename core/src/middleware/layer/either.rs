@@ -32,7 +32,7 @@
 //! external types such as future::Either.
 
 use crate::middleware::{Batch, Notification, RpcServiceT};
-use jsonrpsee_types::Request;
+use wasi_jsonrpsee_types::Request;
 
 /// [`tower::util::Either`] but
 /// adjusted to satisfy the trait bound [`RpcServiceT].

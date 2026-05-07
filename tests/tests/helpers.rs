@@ -35,14 +35,14 @@ use std::time::Duration;
 use fast_socks5::client::Socks5Stream;
 use fast_socks5::server;
 use futures::{SinkExt, Stream, StreamExt};
-use jsonrpsee::core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
-use jsonrpsee::server::middleware::http::ProxyGetRequestLayer;
-use jsonrpsee::server::{
+use wasi_jsonrpsee::core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
+use wasi_jsonrpsee::server::middleware::http::ProxyGetRequestLayer;
+use wasi_jsonrpsee::server::{
 	ConnectionGuard, PendingSubscriptionSink, RpcModule, Server, ServerBuilder, ServerHandle, TrySendError,
 	serve_with_graceful_shutdown, stop_channel,
 };
-use jsonrpsee::types::{ErrorObject, ErrorObjectOwned};
-use jsonrpsee::{Methods, SubscriptionCloseResponse};
+use wasi_jsonrpsee::types::{ErrorObject, ErrorObjectOwned};
+use wasi_jsonrpsee::{Methods, SubscriptionCloseResponse};
 use serde::Serialize;
 use tokio::net::TcpStream;
 use tokio::time::interval;
@@ -159,7 +159,7 @@ pub async fn server() -> SocketAddr {
 
 		fn call<'a>(
 			&self,
-			mut request: jsonrpsee::types::Request<'a>,
+			mut request: wasi_jsonrpsee::types::Request<'a>,
 		) -> impl Future<Output = Self::MethodResponse> + Send + 'a {
 			request.extensions_mut().insert(self.connection_id);
 			self.inner.call(request)
@@ -216,7 +216,7 @@ pub async fn server() -> SocketAddr {
 		let conn_id = Arc::new(AtomicU32::new(0));
 		// Create and finalize a server configuration from a TowerServiceBuilder
 		// given an RpcModule and the stop handle.
-		let svc_builder = jsonrpsee::server::Server::builder().to_service_builder();
+		let svc_builder = wasi_jsonrpsee::server::Server::builder().to_service_builder();
 
 		loop {
 			let stream = tokio::select! {

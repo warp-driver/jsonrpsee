@@ -39,26 +39,26 @@
 mod tests;
 
 pub use http::{HeaderMap, HeaderValue};
-pub use jsonrpsee_core::client::Client as WsClient;
-pub use jsonrpsee_core::client::async_client::PingConfig;
-pub use jsonrpsee_core::client::async_client::RpcService;
-pub use jsonrpsee_core::middleware::RpcServiceBuilder;
-use jsonrpsee_core::middleware::layer::RpcLoggerLayer;
-pub use jsonrpsee_types as types;
+pub use wasi_jsonrpsee_core::client::Client as WsClient;
+pub use wasi_jsonrpsee_core::client::async_client::PingConfig;
+pub use wasi_jsonrpsee_core::client::async_client::RpcService;
+pub use wasi_jsonrpsee_core::middleware::RpcServiceBuilder;
+use wasi_jsonrpsee_core::middleware::layer::RpcLoggerLayer;
+pub use wasi_jsonrpsee_types as types;
 
-use jsonrpsee_client_transport::ws::{AsyncRead, AsyncWrite, WsTransportClientBuilder};
-use jsonrpsee_core::TEN_MB_SIZE_BYTES;
-use jsonrpsee_core::client::{ClientBuilder, Error, IdKind, MaybeSend, TransportReceiverT, TransportSenderT};
+use wasi_jsonrpsee_client_transport::ws::{AsyncRead, AsyncWrite, WsTransportClientBuilder};
+use wasi_jsonrpsee_core::TEN_MB_SIZE_BYTES;
+use wasi_jsonrpsee_core::client::{ClientBuilder, Error, IdKind, MaybeSend, TransportReceiverT, TransportSenderT};
 use std::time::Duration;
 use url::Url;
 
 type Logger = tower::layer::util::Stack<RpcLoggerLayer, tower::layer::util::Identity>;
 
 #[cfg(feature = "tls")]
-pub use jsonrpsee_client_transport::ws::CustomCertStore;
+pub use wasi_jsonrpsee_client_transport::ws::CustomCertStore;
 
 #[cfg(feature = "tls")]
-use jsonrpsee_client_transport::ws::CertificateStore;
+use wasi_jsonrpsee_client_transport::ws::CertificateStore;
 
 /// Builder for [`WsClient`].
 ///
@@ -66,7 +66,7 @@ use jsonrpsee_client_transport::ws::CertificateStore;
 ///
 /// ```no_run
 ///
-/// use jsonrpsee_ws_client::{WsClientBuilder, HeaderMap, HeaderValue};
+/// use wasi_jsonrpsee_ws_client::{WsClientBuilder, HeaderMap, HeaderValue};
 ///
 /// #[tokio::main]
 /// async fn main() {
@@ -143,7 +143,7 @@ impl<RpcMiddleware> WsClientBuilder<RpcMiddleware> {
 	/// # Example
 	///
 	/// ```no_run
-	/// use jsonrpsee_ws_client::{WsClientBuilder, CustomCertStore};
+	/// use wasi_jsonrpsee_ws_client::{WsClientBuilder, CustomCertStore};
 	/// use rustls::{
 	///     client::danger::{self, HandshakeSignatureValid, ServerCertVerified},
 	///     pki_types::{CertificateDer, ServerName, UnixTime},

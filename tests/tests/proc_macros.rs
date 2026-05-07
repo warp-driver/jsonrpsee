@@ -33,20 +33,20 @@ mod helpers;
 use std::net::SocketAddr;
 
 use helpers::init_logger;
-use jsonrpsee::core::client::{ClientT, Error, SubscriptionClientT};
-use jsonrpsee::http_client::HttpClientBuilder;
-use jsonrpsee::rpc_params;
-use jsonrpsee::server::ServerBuilder;
-use jsonrpsee::types::error::{ErrorCode, INVALID_PARAMS_MSG};
+use wasi_jsonrpsee::core::client::{ClientT, Error, SubscriptionClientT};
+use wasi_jsonrpsee::http_client::HttpClientBuilder;
+use wasi_jsonrpsee::rpc_params;
+use wasi_jsonrpsee::server::ServerBuilder;
+use wasi_jsonrpsee::types::error::{ErrorCode, INVALID_PARAMS_MSG};
 
-use jsonrpsee::ws_client::*;
+use wasi_jsonrpsee::ws_client::*;
 use serde_json::json;
 
 mod rpc_impl {
-	use jsonrpsee::core::server::{IntoSubscriptionCloseResponse, PendingSubscriptionSink, SubscriptionCloseResponse};
-	use jsonrpsee::core::{SubscriptionResult, async_trait};
-	use jsonrpsee::proc_macros::rpc;
-	use jsonrpsee::types::{ErrorObject, ErrorObjectOwned};
+	use wasi_jsonrpsee::core::server::{IntoSubscriptionCloseResponse, PendingSubscriptionSink, SubscriptionCloseResponse};
+	use wasi_jsonrpsee::core::{SubscriptionResult, async_trait};
+	use wasi_jsonrpsee::proc_macros::rpc;
+	use wasi_jsonrpsee::types::{ErrorObject, ErrorObjectOwned};
 
 	pub struct CustomSubscriptionRet;
 
@@ -198,7 +198,7 @@ mod rpc_impl {
 }
 
 // Use generated implementations of server and client.
-use jsonrpsee::core::params::{ArrayParams, ObjectParams};
+use wasi_jsonrpsee::core::params::{ArrayParams, ObjectParams};
 use rpc_impl::{RpcClient, RpcServer, RpcServerImpl};
 
 pub async fn server() -> SocketAddr {
@@ -300,21 +300,21 @@ async fn macro_zero_copy_cow() {
 
 #[tokio::test]
 async fn namespace_separator_dot_formatting_works() {
-	use jsonrpsee::core::async_trait;
-	use jsonrpsee::proc_macros::rpc;
+	use wasi_jsonrpsee::core::async_trait;
+	use wasi_jsonrpsee::proc_macros::rpc;
 	use serde_json::json;
 
 	#[rpc(server, namespace = "foo", namespace_separator = ".")]
 	pub trait DotSeparatorRpc {
 		#[method(name = "dot")]
-		fn dot(&self, a: u32, b: &str) -> Result<String, jsonrpsee::types::ErrorObjectOwned>;
+		fn dot(&self, a: u32, b: &str) -> Result<String, wasi_jsonrpsee::types::ErrorObjectOwned>;
 	}
 
 	struct DotImpl;
 
 	#[async_trait]
 	impl DotSeparatorRpcServer for DotImpl {
-		fn dot(&self, a: u32, b: &str) -> Result<String, jsonrpsee::types::ErrorObjectOwned> {
+		fn dot(&self, a: u32, b: &str) -> Result<String, wasi_jsonrpsee::types::ErrorObjectOwned> {
 			Ok(format!("Called with: {}, {}", a, b))
 		}
 	}
@@ -327,21 +327,21 @@ async fn namespace_separator_dot_formatting_works() {
 
 #[tokio::test]
 async fn namespace_separator_slash_formatting_works() {
-	use jsonrpsee::core::async_trait;
-	use jsonrpsee::proc_macros::rpc;
+	use wasi_jsonrpsee::core::async_trait;
+	use wasi_jsonrpsee::proc_macros::rpc;
 	use serde_json::json;
 
 	#[rpc(server, namespace = "math", namespace_separator = "/")]
 	pub trait SlashSeparatorRpc {
 		#[method(name = "add")]
-		fn add(&self, x: i32, y: i32) -> Result<i32, jsonrpsee::types::ErrorObjectOwned>;
+		fn add(&self, x: i32, y: i32) -> Result<i32, wasi_jsonrpsee::types::ErrorObjectOwned>;
 	}
 
 	struct SlashImpl;
 
 	#[async_trait]
 	impl SlashSeparatorRpcServer for SlashImpl {
-		fn add(&self, x: i32, y: i32) -> Result<i32, jsonrpsee::types::ErrorObjectOwned> {
+		fn add(&self, x: i32, y: i32) -> Result<i32, wasi_jsonrpsee::types::ErrorObjectOwned> {
 			Ok(x + y)
 		}
 	}
@@ -357,7 +357,7 @@ async fn namespace_separator_slash_formatting_works() {
 #[ignore]
 #[tokio::test]
 async fn multiple_blocking_calls_overlap() {
-	use jsonrpsee::core::EmptyServerParams;
+	use wasi_jsonrpsee::core::EmptyServerParams;
 	use std::time::{Duration, Instant};
 
 	let module = RpcServerImpl.into_rpc();

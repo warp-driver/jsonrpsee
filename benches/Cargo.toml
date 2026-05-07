@@ -1,7 +1,7 @@
 [package]
-name = "jsonrpsee-benchmarks"
-description = "Benchmarks for jsonrpsee"
-version = "0.26.0"
+name = "wasi-jsonrpsee-benchmarks"
+description = "Benchmarks for wasi-jsonrpsee"
+version = "0.27.0"
 authors = ["Parity Technologies <admin@parity.io>", "Pierre Krieger <pierre.krieger1708@gmail.com>"]
 edition = "2024"
 license = "MIT"
@@ -14,7 +14,7 @@ publish = false
 pprof = { version = "0.15", features = ["flamegraph", "criterion"] }
 criterion = { version = "0.5", features = ["async_tokio", "html_reports"] }
 futures-util = { version = "0.3.14", default-features = false }
-jsonrpsee = { path = "../jsonrpsee", features = ["server"] }
+wasi-jsonrpsee = { package = "wasi-jsonrpsee", path = "../jsonrpsee", features = ["server"] }
 jsonrpsee_v0_20 = { package = "jsonrpsee", version = "=0.20.0", features = ["ws-client", "client-ws-transport-native-tls"] }
 # Disable TLS for benches
 jsonrpsee_v0_20_http_client = { package = "jsonrpsee-http-client", version = "=0.20.0", default-features = false }

@@ -134,7 +134,7 @@ mod params_builder {
 ///
 /// ```rust
 ///
-/// use jsonrpsee_core::params::ObjectParams;
+/// use wasi_jsonrpsee_core::params::ObjectParams;
 ///
 /// let mut builder = ObjectParams::new();
 /// builder.insert("param1", 1);
@@ -177,7 +177,7 @@ impl ToRpcParams for ObjectParams {
 ///
 /// ```rust
 ///
-/// use jsonrpsee_core::params::ArrayParams;
+/// use wasi_jsonrpsee_core::params::ArrayParams;
 ///
 /// let mut builder = ArrayParams::new();
 /// builder.insert("param1");

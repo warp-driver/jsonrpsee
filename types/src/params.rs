@@ -205,7 +205,7 @@ impl<'a> ParamsSequence<'a> {
 	/// Parse the next parameter to type `T`
 	///
 	/// ```
-	/// # use jsonrpsee_types::params::Params;
+	/// # use wasi_jsonrpsee_types::params::Params;
 	/// let params = Params::new(Some(r#"[true, 10, "foo"]"#));
 	/// let mut seq = params.sequence();
 	///
@@ -233,7 +233,7 @@ impl<'a> ParamsSequence<'a> {
 	/// The result will be `None` for `null`, and for missing values in the supplied JSON array.
 	///
 	/// ```
-	/// # use jsonrpsee_types::params::Params;
+	/// # use wasi_jsonrpsee_types::params::Params;
 	/// let params = Params::new(Some(r#"[1, 2, null]"#));
 	/// let mut seq = params.sequence();
 	///

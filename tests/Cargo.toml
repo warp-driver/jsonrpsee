@@ -1,5 +1,5 @@
 [package]
-name = "jsonrpsee-integration-tests"
+name = "wasi-jsonrpsee-integration-tests"
 description = "Integration tests for jsonrpsee"
 version.workspace = true
 authors.workspace = true
@@ -18,8 +18,8 @@ futures-util = { workspace = true, features = ["alloc"]}
 http-body-util = { workspace = true }
 hyper = { workspace = true }
 hyper-util = { workspace = true, features = ["http1", "client", "client-legacy"] }
-jsonrpsee = { path = "../jsonrpsee", features = ["server", "client-core", "http-client", "ws-client", "macros"] }
-jsonrpsee-test-utils = { path = "../test-utils" }
+wasi-jsonrpsee = { path = "../jsonrpsee", features = ["server", "client-core", "http-client", "ws-client", "macros"] }
+wasi-jsonrpsee-test-utils = { path = "../test-utils" }
 serde = { workspace = true, features = ["alloc"] }
 serde_json = { workspace = true }
 tokio = { workspace = true, features = ["rt-multi-thread", "time"] }

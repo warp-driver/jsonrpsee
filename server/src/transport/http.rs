@@ -5,7 +5,7 @@ use crate::{
 };
 use http::Method;
 use hyper::body::{Body, Bytes};
-use jsonrpsee_core::{
+use wasi_jsonrpsee_core::{
 	BoxError,
 	http_helpers::{HttpError, read_body},
 	middleware::{RpcServiceBuilder, RpcServiceT},
@@ -114,9 +114,9 @@ where
 
 /// HTTP response helpers.
 pub mod response {
-	use jsonrpsee_core::server::MethodResponse;
-	use jsonrpsee_types::error::{ErrorCode, reject_too_big_request};
-	use jsonrpsee_types::{ErrorObject, ErrorObjectOwned, Id, Response, ResponsePayload};
+	use wasi_jsonrpsee_core::server::MethodResponse;
+	use wasi_jsonrpsee_types::error::{ErrorCode, reject_too_big_request};
+	use wasi_jsonrpsee_types::{ErrorObject, ErrorObjectOwned, Id, Response, ResponsePayload};
 
 	use crate::{HttpBody, HttpResponse};
 

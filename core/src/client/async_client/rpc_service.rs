@@ -6,7 +6,7 @@ use crate::{
 	middleware::{Batch, IsBatch, IsSubscription, Notification, Request, RpcServiceT},
 };
 
-use jsonrpsee_types::{Response, ResponsePayload};
+use wasi_jsonrpsee_types::{Response, ResponsePayload};
 use tokio::sync::{mpsc, oneshot};
 
 impl From<mpsc::error::SendError<FrontToBack>> for Error {

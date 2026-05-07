@@ -16,8 +16,8 @@ use hyper_util::client::legacy::Client;
 #[cfg(not(wasip2))]
 use hyper_util::client::legacy::connect::HttpConnector;
 use hyper_util::rt::TokioExecutor;
-use jsonrpsee_core::BoxError;
-use jsonrpsee_core::{
+use wasi_jsonrpsee_core::BoxError;
+use wasi_jsonrpsee_core::{
 	TEN_MB_SIZE_BYTES,
 	http_helpers::{self, HttpError},
 };

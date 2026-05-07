@@ -32,18 +32,18 @@ use proc_macro2::{Span, TokenStream as TokenStream2};
 use quote::quote;
 use syn::{Token, WherePredicate, parse_quote, punctuated::Punctuated, token::Comma, visit::Visit};
 
-/// Search for client-side `jsonrpsee` in `Cargo.toml`.
+/// Search for client-side `wasi-jsonrpsee` in `Cargo.toml`.
 pub(crate) fn find_jsonrpsee_client_crate() -> Result<proc_macro2::TokenStream, syn::Error> {
-	find_jsonrpsee_crate(&["jsonrpsee-http-client", "jsonrpsee-ws-client", "jsonrpsee-wasm-client"])
+	find_jsonrpsee_crate(&["wasi-jsonrpsee-http-client", "wasi-jsonrpsee-ws-client", "wasi-jsonrpsee-wasm-client"])
 }
 
-/// Search for server-side `jsonrpsee` in `Cargo.toml`.
+/// Search for server-side `wasi-jsonrpsee` in `Cargo.toml`.
 pub(crate) fn find_jsonrpsee_server_crate() -> Result<proc_macro2::TokenStream, syn::Error> {
-	find_jsonrpsee_crate(&["jsonrpsee-server"])
+	find_jsonrpsee_crate(&["wasi-jsonrpsee-server"])
 }
 
 fn find_jsonrpsee_crate(crate_names: &[&str]) -> Result<proc_macro2::TokenStream, syn::Error> {
-	match crate_name("jsonrpsee") {
+	match crate_name("wasi-jsonrpsee") {
 		Ok(FoundCrate::Name(name)) => {
 			let ident = syn::Ident::new(&name, Span::call_site());
 			Ok(quote!(#ident))
@@ -83,8 +83,8 @@ fn find_jsonrpsee_crate(crate_names: &[&str]) -> Result<proc_macro2::TokenStream
 /// ### Example
 ///
 /// ```
-///  use jsonrpsee::proc_macros::rpc;
-///  use jsonrpsee::core::{RpcResult, SubscriptionResult};
+///  use wasi_jsonrpsee::proc_macros::rpc;
+///  use wasi_jsonrpsee::core::{RpcResult, SubscriptionResult};
 ///
 ///  #[rpc(client, server)]
 ///  pub trait RpcTrait<A, B, C> {
@@ -128,20 +128,20 @@ pub(crate) fn generate_where_clause(
 
 			if is_client {
 				if visitor.input_params.contains(&ty.ident) {
-					bounds.push(parse_quote!(jsonrpsee::core::Serialize))
+					bounds.push(parse_quote!(wasi_jsonrpsee::core::Serialize))
 				}
 				if visitor.ret_params.contains(&ty.ident) || visitor.sub_params.contains(&ty.ident) {
-					bounds.push(parse_quote!(jsonrpsee::core::DeserializeOwned))
+					bounds.push(parse_quote!(wasi_jsonrpsee::core::DeserializeOwned))
 				}
 			} else {
 				if visitor.input_params.contains(&ty.ident) {
-					bounds.push(parse_quote!(jsonrpsee::core::DeserializeOwned))
+					bounds.push(parse_quote!(wasi_jsonrpsee::core::DeserializeOwned))
 				}
 				if visitor.ret_params.contains(&ty.ident) {
 					bounds.push(parse_quote!(std::clone::Clone))
 				}
 				if visitor.ret_params.contains(&ty.ident) || visitor.sub_params.contains(&ty.ident) {
-					bounds.push(parse_quote!(jsonrpsee::core::Serialize))
+					bounds.push(parse_quote!(wasi_jsonrpsee::core::Serialize))
 				}
 			}
 

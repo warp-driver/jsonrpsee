@@ -1,5 +1,5 @@
 [package]
-name = "jsonrpsee-core"
+name = "wasi-jsonrpsee-core"
 description = "Utilities for jsonrpsee"
 version.workspace = true
 authors.workspace = true
@@ -18,7 +18,7 @@ workspace = true
 
 [dependencies]
 async-trait = { workspace = true }
-jsonrpsee-types = { workspace = true }
+wasi-jsonrpsee-types = { workspace = true }
 thiserror = { workspace = true }
 serde = { workspace = true, features = ["alloc"] }
 serde_json = { workspace = true, features = ["std", "raw_value"] }
@@ -72,7 +72,7 @@ async-wasm-client = [
 [dev-dependencies]
 serde_json = { workspace = true }
 tokio = { workspace = true, features = ["macros", "rt"] }
-jsonrpsee = { path = "../jsonrpsee", features = ["server", "macros"] }
+wasi-jsonrpsee = { path = "../jsonrpsee", features = ["server", "macros"] }
 http-body-util = { workspace = true }
 
 [package.metadata.docs.rs]

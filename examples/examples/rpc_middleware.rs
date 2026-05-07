@@ -46,12 +46,12 @@ use std::net::SocketAddr;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-use jsonrpsee::core::client::ClientT;
-use jsonrpsee::core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
-use jsonrpsee::rpc_params;
-use jsonrpsee::server::{RpcModule, Server};
-use jsonrpsee::types::Request;
-use jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::core::client::ClientT;
+use wasi_jsonrpsee::core::middleware::{Batch, Notification, RpcServiceBuilder, RpcServiceT};
+use wasi_jsonrpsee::rpc_params;
+use wasi_jsonrpsee::server::{RpcModule, Server};
+use wasi_jsonrpsee::types::Request;
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
 
 #[derive(Clone)]
 struct IdentityLayer;

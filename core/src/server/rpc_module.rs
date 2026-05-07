@@ -41,8 +41,8 @@ use crate::server::{LOG_TARGET, MethodResponse, ResponsePayload};
 use crate::traits::ToRpcParams;
 use futures_util::{FutureExt, future::BoxFuture};
 use http::Extensions;
-use jsonrpsee_types::error::{ErrorCode, ErrorObject};
-use jsonrpsee_types::{
+use wasi_jsonrpsee_types::error::{ErrorCode, ErrorObject};
+use wasi_jsonrpsee_types::{
 	ErrorObjectOwned, Id, Params, Request, Response, ResponseSuccess, SubscriptionId as RpcSubscriptionId,
 };
 use rustc_hash::FxHashMap;
@@ -288,8 +288,8 @@ impl Methods {
 	/// ```
 	/// #[tokio::main]
 	/// async fn main() {
-	///     use jsonrpsee::{RpcModule, IntoResponse};
-	///     use jsonrpsee::core::RpcResult;
+	///     use wasi_jsonrpsee::{RpcModule, IntoResponse};
+	///     use wasi_jsonrpsee::core::RpcResult;
 	///
 	///     let mut module = RpcModule::new(());
 	///     module.register_method::<RpcResult<u64>, _>("echo_call", |params, _, _| {
@@ -323,9 +323,9 @@ impl Methods {
 	/// ```
 	/// #[tokio::main]
 	/// async fn main() {
-	///     use jsonrpsee::{RpcModule, SubscriptionMessage};
-	///     use jsonrpsee::types::{response::Success, Response};
-	///     use jsonrpsee::core::to_json_raw_value;
+	///     use wasi_jsonrpsee::{RpcModule, SubscriptionMessage};
+	///     use wasi_jsonrpsee::types::{response::Success, Response};
+	///     use wasi_jsonrpsee::core::to_json_raw_value;
 	///     use futures_util::StreamExt;
 	///
 	///     let mut module = RpcModule::new(());
@@ -422,8 +422,8 @@ impl Methods {
 	/// ```
 	/// #[tokio::main]
 	/// async fn main() {
-	///     use jsonrpsee::{RpcModule, SubscriptionMessage};
-	///     use jsonrpsee::core::{EmptyServerParams, RpcResult, to_json_raw_value};
+	///     use wasi_jsonrpsee::{RpcModule, SubscriptionMessage};
+	///     use wasi_jsonrpsee::core::{EmptyServerParams, RpcResult, to_json_raw_value};
 	///
 	///     let mut module = RpcModule::new(());
 	///     module.register_subscription("hi", "hi", "goodbye", |_, pending, _, _| async move {
@@ -489,8 +489,8 @@ impl Methods {
 	/// ```
 	/// #[tokio::main]
 	/// async fn main() {
-	///     use jsonrpsee::{RpcModule, IntoResponse, Extensions};
-	///     use jsonrpsee::core::RpcResult;
+	///     use wasi_jsonrpsee::{RpcModule, IntoResponse, Extensions};
+	///     use wasi_jsonrpsee::core::RpcResult;
 	///
 	///     let mut module = RpcModule::new(());
 	///     module.register_method::<RpcResult<u64>, _>("magic_multiply", |params, _, ext| {
@@ -567,7 +567,7 @@ impl<Context: Send + Sync + 'static> RpcModule<Context> {
 	/// ## Examples
 	///
 	/// ```
-	/// use jsonrpsee_core::server::RpcModule;
+	/// use wasi_jsonrpsee_core::server::RpcModule;
 	///
 	/// let mut module = RpcModule::new(());
 	/// module.register_method("say_hello", |_params, _ctx, _| "lo").unwrap();
@@ -605,7 +605,7 @@ impl<Context: Send + Sync + 'static> RpcModule<Context> {
 	/// ## Examples
 	///
 	/// ```
-	/// use jsonrpsee_core::server::RpcModule;
+	/// use wasi_jsonrpsee_core::server::RpcModule;
 	///
 	/// let mut module = RpcModule::new(());
 	/// module.register_async_method("say_hello", |_params, _ctx, _| async { "lo" }).unwrap();
@@ -741,8 +741,8 @@ impl<Context: Send + Sync + 'static> RpcModule<Context> {
 	///
 	/// ```no_run
 	///
-	/// use jsonrpsee_core::server::{RpcModule, SubscriptionSink, SubscriptionMessage};
-	/// use jsonrpsee_types::ErrorObjectOwned;
+	/// use wasi_jsonrpsee_core::server::{RpcModule, SubscriptionSink, SubscriptionMessage};
+	/// use wasi_jsonrpsee_types::ErrorObjectOwned;
 	///
 	/// let mut ctx = RpcModule::new(99_usize);
 	/// ctx.register_subscription("sub", "notif_name", "unsub", |params, pending, ctx, _| async move {
@@ -886,8 +886,8 @@ impl<Context: Send + Sync + 'static> RpcModule<Context> {
 	///
 	/// ```no_run
 	///
-	/// use jsonrpsee_core::server::{RpcModule, SubscriptionSink, SubscriptionMessage};
-	/// use jsonrpsee_types::ErrorObjectOwned;
+	/// use wasi_jsonrpsee_core::server::{RpcModule, SubscriptionSink, SubscriptionMessage};
+	/// use wasi_jsonrpsee_types::ErrorObjectOwned;
 	///
 	/// let mut ctx = RpcModule::new(99_usize);
 	/// ctx.register_subscription_raw("sub", "notif_name", "unsub", |params, pending, ctx, _| {

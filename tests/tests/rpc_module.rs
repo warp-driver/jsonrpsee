@@ -33,10 +33,10 @@ use std::time::Duration;
 
 use futures::StreamExt;
 use helpers::{init_logger, pipe_from_stream_and_drop};
-use jsonrpsee::core::{EmptyServerParams, SubscriptionError};
-use jsonrpsee::core::{RpcResult, server::*};
-use jsonrpsee::types::error::{ErrorCode, ErrorObject, INVALID_PARAMS_MSG, PARSE_ERROR_CODE};
-use jsonrpsee::types::{ErrorObjectOwned, Response, ResponsePayload};
+use wasi_jsonrpsee::core::{EmptyServerParams, SubscriptionError};
+use wasi_jsonrpsee::core::{RpcResult, server::*};
+use wasi_jsonrpsee::types::error::{ErrorCode, ErrorObject, INVALID_PARAMS_MSG, PARSE_ERROR_CODE};
+use wasi_jsonrpsee::types::{ErrorObjectOwned, Response, ResponsePayload};
 use serde::{Deserialize, Serialize};
 use serde_json::value::RawValue;
 use tokio::sync::mpsc;
@@ -139,7 +139,7 @@ async fn calling_method_without_server() {
 
 #[tokio::test]
 async fn calling_method_without_server_using_proc_macro() {
-	use jsonrpsee::{core::async_trait, proc_macros::rpc};
+	use wasi_jsonrpsee::{core::async_trait, proc_macros::rpc};
 	// Setup
 	#[derive(Debug, Deserialize, Serialize)]
 	#[allow(unreachable_pub)]
@@ -531,7 +531,7 @@ async fn serialize_sub_error_json() {
 		notif.get()
 	);
 
-	assert!(serde_json::from_str::<jsonrpsee::types::response::SubscriptionError<MyError>>(notif.get()).is_ok());
+	assert!(serde_json::from_str::<wasi_jsonrpsee::types::response::SubscriptionError<MyError>>(notif.get()).is_ok());
 }
 
 #[tokio::test]
@@ -564,12 +564,12 @@ async fn serialize_sub_error_str() {
 		notif.get()
 	);
 
-	assert!(serde_json::from_str::<jsonrpsee::types::response::SubscriptionError<MyError>>(notif.get()).is_err());
+	assert!(serde_json::from_str::<wasi_jsonrpsee::types::response::SubscriptionError<MyError>>(notif.get()).is_err());
 }
 
 #[tokio::test]
 async fn subscription_close_response_works() {
-	use jsonrpsee::SubscriptionCloseResponse;
+	use wasi_jsonrpsee::SubscriptionCloseResponse;
 
 	init_logger();
 
@@ -613,7 +613,7 @@ async fn subscription_close_response_works() {
 
 #[tokio::test]
 async fn method_response_notify_on_completion() {
-	use jsonrpsee::server::ResponsePayload;
+	use wasi_jsonrpsee::server::ResponsePayload;
 
 	init_logger();
 

@@ -26,18 +26,18 @@
 
 //! JSON-RPC service middleware.
 
-pub use jsonrpsee_core::middleware::*;
-pub use jsonrpsee_core::server::MethodResponse;
+pub use wasi_jsonrpsee_core::middleware::*;
+pub use wasi_jsonrpsee_core::server::MethodResponse;
 
 use std::sync::Arc;
 
 use crate::ConnectionId;
-use jsonrpsee_core::server::{
+use wasi_jsonrpsee_core::server::{
 	BatchResponseBuilder, BoundedSubscriptions, MethodCallback, MethodSink, Methods, SubscriptionState,
 };
-use jsonrpsee_core::traits::IdProvider;
-use jsonrpsee_types::ErrorObject;
-use jsonrpsee_types::error::{ErrorCode, reject_too_many_subscriptions};
+use wasi_jsonrpsee_core::traits::IdProvider;
+use wasi_jsonrpsee_types::ErrorObject;
+use wasi_jsonrpsee_types::error::{ErrorCode, reject_too_many_subscriptions};
 
 /// JSON-RPC service middleware.
 #[derive(Clone, Debug)]
@@ -84,7 +84,7 @@ impl RpcServiceT for RpcService {
 		let max_response_body_size = self.max_response_body_size;
 
 		let Request { id, method, params, extensions, .. } = req;
-		let params = jsonrpsee_types::Params::new(params.as_ref().map(|p| serde_json::value::RawValue::get(p)));
+		let params = wasi_jsonrpsee_types::Params::new(params.as_ref().map(|p| serde_json::value::RawValue::get(p)));
 
 		match self.methods.method_with_name(&method) {
 			None => {

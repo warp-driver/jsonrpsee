@@ -1,4 +1,4 @@
-use jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::proc_macros::rpc;
 
 // Subscription method name conflict with notif override.
 #[rpc(client, server)]

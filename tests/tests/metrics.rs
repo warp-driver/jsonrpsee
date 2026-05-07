@@ -35,14 +35,14 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use helpers::init_logger;
-use jsonrpsee::core::middleware::{Batch, Notification, Request, RpcServiceBuilder, RpcServiceT};
-use jsonrpsee::core::{ClientError, client::ClientT};
-use jsonrpsee::http_client::HttpClientBuilder;
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::server::{Server, ServerHandle};
-use jsonrpsee::types::{ErrorObject, ErrorObjectOwned, Id};
-use jsonrpsee::ws_client::WsClientBuilder;
-use jsonrpsee::{MethodResponse, RpcModule, rpc_params};
+use wasi_jsonrpsee::core::middleware::{Batch, Notification, Request, RpcServiceBuilder, RpcServiceT};
+use wasi_jsonrpsee::core::{ClientError, client::ClientT};
+use wasi_jsonrpsee::http_client::HttpClientBuilder;
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::server::{Server, ServerHandle};
+use wasi_jsonrpsee::types::{ErrorObject, ErrorObjectOwned, Id};
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::{MethodResponse, RpcModule, rpc_params};
 use tokio::time::sleep;
 
 #[derive(Default, Clone)]

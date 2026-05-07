@@ -31,12 +31,12 @@ use crate::tests::helpers::{Metrics, deser_call, init_logger, server_with_contex
 use crate::types::SubscriptionId;
 use crate::{BatchRequestConfig, RegisterMethodError, ServerConfig};
 use crate::{RpcModule, ServerBuilder};
-use jsonrpsee_core::server::SendTimeoutError;
-use jsonrpsee_core::traits::IdProvider;
-use jsonrpsee_test_utils::TimeoutFutureExt;
-use jsonrpsee_test_utils::helpers::*;
-use jsonrpsee_test_utils::mocks::{Id, WebSocketTestClient, WebSocketTestError};
-use jsonrpsee_types::SubscriptionResponse;
+use wasi_jsonrpsee_core::server::SendTimeoutError;
+use wasi_jsonrpsee_core::traits::IdProvider;
+use wasi_jsonrpsee_test_utils::TimeoutFutureExt;
+use wasi_jsonrpsee_test_utils::helpers::*;
+use wasi_jsonrpsee_test_utils::mocks::{Id, WebSocketTestClient, WebSocketTestError};
+use wasi_jsonrpsee_types::SubscriptionResponse;
 use serde_json::Value as JsonValue;
 
 use super::helpers::server;

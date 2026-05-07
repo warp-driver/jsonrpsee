@@ -2,10 +2,10 @@
 
 use std::net::SocketAddr;
 
-use jsonrpsee::core::{async_trait, RpcResult, SubscriptionResult};
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::server::ServerBuilder;
-use jsonrpsee::ws_client::*;
+use wasi_jsonrpsee::core::{async_trait, RpcResult, SubscriptionResult};
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::server::ServerBuilder;
+use wasi_jsonrpsee::ws_client::*;
 
 pub trait Config {
 	type Hash: Send + Sync + 'static;
@@ -19,21 +19,21 @@ impl Config for ExampleHash {
 }
 
 /// Client only RPC.
-#[rpc(client, namespace = "foo", client_bounds(Conf::Hash: jsonrpsee::core::DeserializeOwned))]
+#[rpc(client, namespace = "foo", client_bounds(Conf::Hash: wasi_jsonrpsee::core::DeserializeOwned))]
 pub trait MyRpcC<Conf: Config> {
 	#[method(name = "bar")]
 	fn method(&self) -> RpcResult<Conf::Hash>;
 }
 
 /// Server only RPC.
-#[rpc(server, namespace = "foo", server_bounds(Conf::Hash: jsonrpsee::core::Serialize + Clone))]
+#[rpc(server, namespace = "foo", server_bounds(Conf::Hash: wasi_jsonrpsee::core::Serialize + Clone))]
 pub trait MyRpcS<Conf: Config> {
 	#[method(name = "bar")]
 	fn method(&self) -> RpcResult<Conf::Hash>;
 }
 
 /// Client and server RPC.
-#[rpc(server, client, namespace = "foo", client_bounds(Conf::Hash: jsonrpsee::core::DeserializeOwned), server_bounds(Conf::Hash: jsonrpsee::core::Serialize + Clone))]
+#[rpc(server, client, namespace = "foo", client_bounds(Conf::Hash: wasi_jsonrpsee::core::DeserializeOwned), server_bounds(Conf::Hash: wasi_jsonrpsee::core::Serialize + Clone))]
 pub trait MyRpcSC<Conf: Config> {
 	#[method(name = "bar")]
 	fn method(&self) -> RpcResult<Conf::Hash>;

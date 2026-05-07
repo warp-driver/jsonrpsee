@@ -28,7 +28,7 @@
 
 use crate::HttpRequest;
 use http::uri::{InvalidUri, Uri};
-use jsonrpsee_core::http_helpers;
+use wasi_jsonrpsee_core::http_helpers;
 
 /// Represent the http URI scheme that is returned by the HTTP host header
 ///

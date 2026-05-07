@@ -41,7 +41,7 @@ use crate::{
 	client::{Error, RawResponseOwned, SubscriptionReceiver, SubscriptionSender},
 	error::RegisterMethodError,
 };
-use jsonrpsee_types::{Id, InvalidRequestId, SubscriptionId};
+use wasi_jsonrpsee_types::{Id, InvalidRequestId, SubscriptionId};
 use rustc_hash::FxHashMap;
 use tokio::sync::oneshot;
 
@@ -337,7 +337,7 @@ mod tests {
 	use crate::client::subscription_channel;
 
 	use super::RequestManager;
-	use jsonrpsee_types::{Id, SubscriptionId};
+	use wasi_jsonrpsee_types::{Id, SubscriptionId};
 	use tokio::sync::oneshot;
 
 	#[test]

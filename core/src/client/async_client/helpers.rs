@@ -38,8 +38,8 @@ use http::Extensions;
 use serde_json::value::RawValue;
 use tokio::sync::oneshot;
 
-use jsonrpsee_types::response::SubscriptionError;
-use jsonrpsee_types::{
+use wasi_jsonrpsee_types::response::SubscriptionError;
+use wasi_jsonrpsee_types::{
 	ErrorObject, Id, InvalidRequestId, Request, Response, ResponseSuccess, SubscriptionId, SubscriptionResponse,
 	TwoPointZero,
 };
@@ -68,7 +68,7 @@ pub(crate) fn process_batch_response(
 
 	for _ in range {
 		let err_obj = ErrorObject::borrowed(0, "", None);
-		responses.push(Response::new(jsonrpsee_types::ResponsePayload::error(err_obj), Id::Null).into());
+		responses.push(Response::new(wasi_jsonrpsee_types::ResponsePayload::error(err_obj), Id::Null).into());
 	}
 
 	for rp in rps {

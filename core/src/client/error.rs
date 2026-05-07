@@ -27,7 +27,7 @@
 //! Error type for client(s).
 
 use crate::{BoxError, RegisterMethodError, params::EmptyBatchRequest};
-use jsonrpsee_types::{ErrorObjectOwned, InvalidRequestId};
+use wasi_jsonrpsee_types::{ErrorObjectOwned, InvalidRequestId};
 use std::sync::Arc;
 
 /// Error type.

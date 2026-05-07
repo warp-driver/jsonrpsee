@@ -5,10 +5,10 @@
 
 use std::net::SocketAddr;
 
-use jsonrpsee::core::{async_trait, RpcResult};
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::server::ServerBuilder;
-use jsonrpsee::ws_client::*;
+use wasi_jsonrpsee::core::{async_trait, RpcResult};
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::server::ServerBuilder;
+use wasi_jsonrpsee::ws_client::*;
 
 #[rpc(client, server)]
 pub trait Deprecated {

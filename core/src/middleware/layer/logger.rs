@@ -30,7 +30,7 @@ use crate::middleware::{Batch, Notification, RpcServiceT};
 use crate::traits::ToJson;
 
 use futures_util::Future;
-use jsonrpsee_types::Request;
+use wasi_jsonrpsee_types::Request;
 use serde_json::value::RawValue;
 use tracing::Instrument;
 

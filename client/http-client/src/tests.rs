@@ -26,14 +26,14 @@
 
 use crate::HttpClientBuilder;
 use crate::types::error::{ErrorCode, ErrorObject};
-use jsonrpsee_core::ClientError;
-use jsonrpsee_core::client::{BatchResponse, ClientT, IdKind};
-use jsonrpsee_core::params::BatchRequestBuilder;
-use jsonrpsee_core::{DeserializeOwned, rpc_params};
-use jsonrpsee_test_utils::TimeoutFutureExt;
-use jsonrpsee_test_utils::helpers::*;
-use jsonrpsee_test_utils::mocks::Id;
-use jsonrpsee_types::error::ErrorObjectOwned;
+use wasi_jsonrpsee_core::ClientError;
+use wasi_jsonrpsee_core::client::{BatchResponse, ClientT, IdKind};
+use wasi_jsonrpsee_core::params::BatchRequestBuilder;
+use wasi_jsonrpsee_core::{DeserializeOwned, rpc_params};
+use wasi_jsonrpsee_test_utils::TimeoutFutureExt;
+use wasi_jsonrpsee_test_utils::helpers::*;
+use wasi_jsonrpsee_test_utils::mocks::Id;
+use wasi_jsonrpsee_types::error::ErrorObjectOwned;
 
 fn init_logger() {
 	let _ = tracing_subscriber::FmtSubscriber::builder()

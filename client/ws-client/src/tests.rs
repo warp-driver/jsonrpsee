@@ -27,16 +27,16 @@
 use crate::WsClientBuilder;
 use crate::types::error::{ErrorCode, ErrorObject};
 
-use jsonrpsee_core::client::{
+use wasi_jsonrpsee_core::client::{
 	BatchResponse, ClientT, Error, IdKind, Subscription, SubscriptionClientT, SubscriptionCloseReason,
 };
-use jsonrpsee_core::params::BatchRequestBuilder;
-use jsonrpsee_core::{DeserializeOwned, rpc_params};
-use jsonrpsee_test_utils::TimeoutFutureExt;
-use jsonrpsee_test_utils::helpers::*;
-use jsonrpsee_test_utils::mocks::{Id, WebSocketTestServer};
-use jsonrpsee_types::error::ErrorObjectOwned;
-use jsonrpsee_types::{Notification, SubscriptionId, SubscriptionPayload, SubscriptionResponse};
+use wasi_jsonrpsee_core::params::BatchRequestBuilder;
+use wasi_jsonrpsee_core::{DeserializeOwned, rpc_params};
+use wasi_jsonrpsee_test_utils::TimeoutFutureExt;
+use wasi_jsonrpsee_test_utils::helpers::*;
+use wasi_jsonrpsee_test_utils::mocks::{Id, WebSocketTestServer};
+use wasi_jsonrpsee_types::error::ErrorObjectOwned;
+use wasi_jsonrpsee_types::{Notification, SubscriptionId, SubscriptionPayload, SubscriptionResponse};
 use serde_json::Value as JsonValue;
 
 fn init_logger() {
@@ -484,7 +484,7 @@ async fn redirections() {
 
 	let server_url = format!("ws://{}", server.local_addr());
 	let redirect_url =
-		jsonrpsee_test_utils::mocks::ws_server_with_redirect(server_url).with_default_timeout().await.unwrap();
+		wasi_jsonrpsee_test_utils::mocks::ws_server_with_redirect(server_url).with_default_timeout().await.unwrap();
 
 	// The client will first connect to a server that only performs re-directions and finally
 	// redirect to another server to complete the handshake.

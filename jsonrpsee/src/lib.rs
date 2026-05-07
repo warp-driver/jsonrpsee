@@ -57,47 +57,47 @@
 mod macros;
 
 cfg_http_client! {
-	pub use jsonrpsee_http_client as http_client;
+	pub use wasi_jsonrpsee_http_client as http_client;
 }
 
 cfg_ws_client! {
-	pub use jsonrpsee_ws_client as ws_client;
+	pub use wasi_jsonrpsee_ws_client as ws_client;
 }
 
 cfg_wasm_client! {
-	pub use jsonrpsee_wasm_client as wasm_client;
+	pub use wasi_jsonrpsee_wasm_client as wasm_client;
 }
 
 cfg_async_client! {
-	pub use jsonrpsee_core::client::async_client;
+	pub use wasi_jsonrpsee_core::client::async_client;
 }
 
 cfg_client_transport! {
-	pub use jsonrpsee_client_transport as client_transport;
+	pub use wasi_jsonrpsee_client_transport as client_transport;
 }
 
 cfg_server! {
-	pub use jsonrpsee_server as server;
+	pub use wasi_jsonrpsee_server as server;
 	pub use tokio;
 }
 
 cfg_server_core! {
-	pub use jsonrpsee_core::server::*;
+	pub use wasi_jsonrpsee_core::server::*;
 }
 
 cfg_proc_macros! {
-	pub use jsonrpsee_proc_macros as proc_macros;
+	pub use wasi_jsonrpsee_proc_macros as proc_macros;
 	pub use tracing;
 }
 
 cfg_types! {
-	pub use jsonrpsee_types as types;
+	pub use wasi_jsonrpsee_types as types;
 }
 
 cfg_client_or_server! {
-	pub use jsonrpsee_core as core;
+	pub use wasi_jsonrpsee_core as core;
 }
 
 cfg_client! {
-	pub use jsonrpsee_core::rpc_params;
+	pub use wasi_jsonrpsee_core::rpc_params;
 }

@@ -1,4 +1,4 @@
-use jsonrpsee::{proc_macros::rpc, core::RpcResult};
+use wasi_jsonrpsee::{proc_macros::rpc, core::RpcResult};
 
 // Names must be unique.
 #[rpc(client, server)]

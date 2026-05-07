@@ -43,16 +43,16 @@ use futures_util::future::{self, Either, FutureExt};
 use futures_util::io::{BufReader, BufWriter};
 use hyper::body::Bytes;
 use hyper_util::rt::{TokioExecutor, TokioIo};
-use jsonrpsee_core::id_providers::RandomIntegerIdProvider;
-use jsonrpsee_core::middleware::{Batch, BatchEntry, BatchEntryErr, RpcServiceBuilder, RpcServiceT};
-use jsonrpsee_core::server::helpers::prepare_error;
-use jsonrpsee_core::server::{BoundedSubscriptions, ConnectionId, MethodResponse, MethodSink, Methods};
-use jsonrpsee_core::traits::IdProvider;
-use jsonrpsee_core::{BoxError, JsonRawValue, TEN_MB_SIZE_BYTES};
-use jsonrpsee_types::error::{
+use wasi_jsonrpsee_core::id_providers::RandomIntegerIdProvider;
+use wasi_jsonrpsee_core::middleware::{Batch, BatchEntry, BatchEntryErr, RpcServiceBuilder, RpcServiceT};
+use wasi_jsonrpsee_core::server::helpers::prepare_error;
+use wasi_jsonrpsee_core::server::{BoundedSubscriptions, ConnectionId, MethodResponse, MethodSink, Methods};
+use wasi_jsonrpsee_core::traits::IdProvider;
+use wasi_jsonrpsee_core::{BoxError, JsonRawValue, TEN_MB_SIZE_BYTES};
+use wasi_jsonrpsee_types::error::{
 	BATCHES_NOT_SUPPORTED_CODE, BATCHES_NOT_SUPPORTED_MSG, ErrorCode, reject_too_big_batch_request,
 };
-use jsonrpsee_types::{ErrorObject, Id};
+use wasi_jsonrpsee_types::{ErrorObject, Id};
 use soketto::handshake::http::is_upgrade_request;
 use tokio::net::{TcpListener, TcpStream, ToSocketAddrs};
 use tokio::sync::{OwnedSemaphorePermit, mpsc, watch};
@@ -477,7 +477,7 @@ impl ServerConfigBuilder {
 	///
 	/// ```rust
 	/// use std::{time::Duration, num::NonZeroUsize};
-	/// use jsonrpsee_server::{ServerConfigBuilder, PingConfig};
+	/// use wasi_jsonrpsee_server::{ServerConfigBuilder, PingConfig};
 	///
 	/// // Set the ping interval to 10 seconds but terminates the connection if a client is inactive for more than 2 minutes
 	/// let ping_cfg = PingConfig::new().ping_interval(Duration::from_secs(10)).inactive_limit(Duration::from_secs(60 * 2));
@@ -507,7 +507,7 @@ impl ServerConfigBuilder {
 	/// # Examples
 	///
 	/// ```rust
-	/// use jsonrpsee_server::{ServerConfigBuilder, RandomStringIdProvider, IdProvider};
+	/// use wasi_jsonrpsee_server::{ServerConfigBuilder, RandomStringIdProvider, IdProvider};
 	///
 	/// // static dispatch
 	/// let builder1 = ServerConfigBuilder::default().set_id_provider(RandomStringIdProvider::new(16));
@@ -685,8 +685,8 @@ impl<HttpMiddleware, RpcMiddleware> Builder<HttpMiddleware, RpcMiddleware> {
 	/// use std::{time::Instant, net::SocketAddr, sync::Arc};
 	/// use std::sync::atomic::{Ordering, AtomicUsize};
 	///
-	/// use jsonrpsee_server::middleware::rpc::{RpcService, RpcServiceBuilder, RpcServiceT, MethodResponse, Notification, Request, Batch};
-	/// use jsonrpsee_server::ServerBuilder;
+	/// use wasi_jsonrpsee_server::middleware::rpc::{RpcService, RpcServiceBuilder, RpcServiceT, MethodResponse, Notification, Request, Batch};
+	/// use wasi_jsonrpsee_server::ServerBuilder;
 	///
 	/// #[derive(Clone)]
 	/// struct MyMiddleware<S> {
@@ -748,7 +748,7 @@ impl<HttpMiddleware, RpcMiddleware> Builder<HttpMiddleware, RpcMiddleware> {
 	/// async fn main() {
 	///     let builder = tower::ServiceBuilder::new().timeout(Duration::from_secs(2));
 	///
-	///     let server = jsonrpsee_server::ServerBuilder::new()
+	///     let server = wasi_jsonrpsee_server::ServerBuilder::new()
 	///         .set_http_middleware(builder)
 	///         .build("127.0.0.1:0".parse::<SocketAddr>().unwrap())
 	///         .await
@@ -766,7 +766,7 @@ impl<HttpMiddleware, RpcMiddleware> Builder<HttpMiddleware, RpcMiddleware> {
 	/// # Examples
 	///
 	/// ```no_run
-	/// use jsonrpsee_server::{Methods, ServerConfig, ServerHandle, ws, stop_channel, serve_with_graceful_shutdown};
+	/// use wasi_jsonrpsee_server::{Methods, ServerConfig, ServerHandle, ws, stop_channel, serve_with_graceful_shutdown};
 	/// use tower::Service;
 	/// use std::{error::Error as StdError, net::SocketAddr};
 	/// use futures_util::future::{self, Either};
@@ -774,7 +774,7 @@ impl<HttpMiddleware, RpcMiddleware> Builder<HttpMiddleware, RpcMiddleware> {
 	///
 	/// fn run_server() -> ServerHandle {
 	///     let (stop_handle, server_handle) = stop_channel();
-	///     let svc_builder = jsonrpsee_server::Server::builder()
+	///     let svc_builder = wasi_jsonrpsee_server::Server::builder()
 	///         .set_config(ServerConfig::builder().max_connections(33).build())
 	///         .to_service_builder();
 	///     let methods = Methods::new();
@@ -857,8 +857,8 @@ impl<HttpMiddleware, RpcMiddleware> Builder<HttpMiddleware, RpcMiddleware> {
 	///       occupied_addr,
 	///       "127.0.0.1:0".parse().unwrap(),
 	///   ];
-	///   assert!(jsonrpsee_server::ServerBuilder::default().build(occupied_addr).await.is_err());
-	///   assert!(jsonrpsee_server::ServerBuilder::default().build(addrs).await.is_ok());
+	///   assert!(wasi_jsonrpsee_server::ServerBuilder::default().build(occupied_addr).await.is_err());
+	///   assert!(wasi_jsonrpsee_server::ServerBuilder::default().build(addrs).await.is_ok());
 	/// }
 	/// ```
 	///
@@ -877,7 +877,7 @@ impl<HttpMiddleware, RpcMiddleware> Builder<HttpMiddleware, RpcMiddleware> {
 	///
 	///
 	/// ```rust
-	/// use jsonrpsee_server::Server;
+	/// use wasi_jsonrpsee_server::Server;
 	/// use socket2::{Domain, Socket, Type};
 	/// use std::time::Duration;
 	///
@@ -1313,7 +1313,7 @@ where
 				} else if let Ok(notif) = deserialize_with_ext::notif::from_str::<Notif>(call.get(), &extensions) {
 					batch.push(Ok(BatchEntry::Notification(notif)));
 				} else {
-					let id = match serde_json::from_str::<jsonrpsee_types::InvalidRequest>(call.get()) {
+					let id = match serde_json::from_str::<wasi_jsonrpsee_types::InvalidRequest>(call.get()) {
 						Ok(err) => err.id,
 						Err(_) => Id::Null,
 					};

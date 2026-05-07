@@ -1,5 +1,5 @@
 [package]
-name = "jsonrpsee-ws-client"
+name = "wasi-jsonrpsee-ws-client"
 description = "JSON-RPC websocket client"
 version.workspace = true
 authors.workspace = true
@@ -18,23 +18,23 @@ workspace = true
 
 [dependencies]
 http = { workspace = true }
-jsonrpsee-types = { workspace = true }
-jsonrpsee-client-transport = { workspace = true, features = ["ws"] }
-jsonrpsee-core = { workspace = true, features = ["async-client"] }
+wasi-jsonrpsee-types = { workspace = true }
+wasi-jsonrpsee-client-transport = { workspace = true, features = ["ws"] }
+wasi-jsonrpsee-core = { workspace = true, features = ["async-client"] }
 url = { workspace = true }
 tower = { workspace = true }
 
 [dev-dependencies]
 tracing-subscriber = { workspace = true }
-jsonrpsee-test-utils = { path = "../../test-utils" }
+wasi-jsonrpsee-test-utils = { path = "../../test-utils" }
 tokio = { workspace = true, features = ["macros"] }
 serde_json = { workspace = true }
 serde = { workspace = true, features = ["alloc"] }
 rustls = { workspace = true, features = ["logging", "std", "tls12", "ring"] }
 
 [features]
-tls = ["jsonrpsee-client-transport/tls"]
-tls-rustls-platform-verifier = ["jsonrpsee-client-transport/tls-rustls-platform-verifier", "tls"]
+tls = ["wasi-jsonrpsee-client-transport/tls"]
+tls-rustls-platform-verifier = ["wasi-jsonrpsee-client-transport/tls-rustls-platform-verifier", "tls"]
 default = ["tls-rustls-platform-verifier"]
 
 [package.metadata.docs.rs]

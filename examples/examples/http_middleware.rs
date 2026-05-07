@@ -36,7 +36,7 @@
 use hyper::Method;
 use hyper::body::Bytes;
 use hyper::http::HeaderValue;
-use jsonrpsee::rpc_params;
+use wasi_jsonrpsee::rpc_params;
 use std::iter::once;
 use std::net::SocketAddr;
 use std::time::Duration;
@@ -46,10 +46,10 @@ use tower_http::cors::CorsLayer;
 use tower_http::sensitive_headers::SetSensitiveRequestHeadersLayer;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 
-use jsonrpsee::core::client::ClientT;
-use jsonrpsee::http_client::HttpClient;
-use jsonrpsee::server::{RpcModule, Server};
-use jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::core::client::ClientT;
+use wasi_jsonrpsee::http_client::HttpClient;
+use wasi_jsonrpsee::server::{RpcModule, Server};
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

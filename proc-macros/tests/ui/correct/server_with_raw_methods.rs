@@ -1,6 +1,6 @@
 //! Example of using proc macro to generate working client.
 
-use jsonrpsee::{core::RpcResult, proc_macros::rpc, types::ErrorObjectOwned};
+use wasi_jsonrpsee::{core::RpcResult, proc_macros::rpc, types::ErrorObjectOwned};
 
 #[rpc(server)]
 pub trait Rpc {

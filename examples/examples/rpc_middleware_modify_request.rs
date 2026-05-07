@@ -24,12 +24,12 @@
 // IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-use jsonrpsee::core::client::ClientT;
-use jsonrpsee::core::middleware::{Batch, BatchEntry, Notification, RpcServiceBuilder, RpcServiceT};
-use jsonrpsee::server::Server;
-use jsonrpsee::types::Request;
-use jsonrpsee::ws_client::WsClientBuilder;
-use jsonrpsee::{RpcModule, rpc_params};
+use wasi_jsonrpsee::core::client::ClientT;
+use wasi_jsonrpsee::core::middleware::{Batch, BatchEntry, Notification, RpcServiceBuilder, RpcServiceT};
+use wasi_jsonrpsee::server::Server;
+use wasi_jsonrpsee::types::Request;
+use wasi_jsonrpsee::ws_client::WsClientBuilder;
+use wasi_jsonrpsee::{RpcModule, rpc_params};
 use std::borrow::Cow as StdCow;
 use std::net::SocketAddr;
 

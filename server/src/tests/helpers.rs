@@ -8,10 +8,10 @@ use crate::{
 };
 
 use futures_util::FutureExt;
-use jsonrpsee_core::server::Methods;
-use jsonrpsee_core::{DeserializeOwned, RpcResult, SubscriptionError};
-use jsonrpsee_test_utils::TimeoutFutureExt;
-use jsonrpsee_types::{ErrorObject, ErrorObjectOwned, Response, ResponseSuccess, error::ErrorCode};
+use wasi_jsonrpsee_core::server::Methods;
+use wasi_jsonrpsee_core::{DeserializeOwned, RpcResult, SubscriptionError};
+use wasi_jsonrpsee_test_utils::TimeoutFutureExt;
+use wasi_jsonrpsee_types::{ErrorObject, ErrorObjectOwned, Response, ResponseSuccess, error::ErrorCode};
 use tokio::net::TcpListener;
 use tower::Service;
 use tracing_subscriber::{EnvFilter, FmtSubscriber};

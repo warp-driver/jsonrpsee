@@ -1,9 +1,9 @@
 //! Test module for the proc-macro API to make sure that it compiles with the core features.
 
-use jsonrpsee::PendingSubscriptionSink;
-use jsonrpsee::core::{SubscriptionResult, async_trait, to_json_raw_value};
-use jsonrpsee::proc_macros::rpc;
-use jsonrpsee::types::ErrorObjectOwned;
+use wasi_jsonrpsee::PendingSubscriptionSink;
+use wasi_jsonrpsee::core::{SubscriptionResult, async_trait, to_json_raw_value};
+use wasi_jsonrpsee::proc_macros::rpc;
+use wasi_jsonrpsee::types::ErrorObjectOwned;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]

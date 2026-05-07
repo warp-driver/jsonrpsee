@@ -1,5 +1,5 @@
 [package]
-name = "jsonrpsee-client-transport"
+name = "wasi-jsonrpsee-client-transport"
 description = "JSON-RPC client transports"
 version.workspace = true
 authors.workspace = true
@@ -17,7 +17,7 @@ publish = true
 workspace = true
 
 [dependencies]
-jsonrpsee-core = { workspace = true, features = ["client"] }
+wasi-jsonrpsee-core = { workspace = true, features = ["client"] }
 
 # optional
 thiserror = { workspace = true, optional = true }
